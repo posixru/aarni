@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/" >
+        <file>images/lock.ico</file>
+        <file>trans/lang_en.qm</file>
+        <file>trans/lang_zh.qm</file>
+    </qresource>
+</RCC>
