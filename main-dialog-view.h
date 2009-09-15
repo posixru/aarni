@@ -41,6 +41,7 @@ public:
 
 signals:
     void encryptRequested(EncryptionParameter& param);
+    void encryptCanceled();
 
 public slots:
     void setEncryptProgress(int progress);
@@ -56,6 +57,8 @@ private slots:
     void showPassword(int state);
 
     void changePreferenceDescription(int index);
+
+    void cancelEncrypt();
 
 private:
     void requestEncrypt(CIPHER_OP_MODE mode);

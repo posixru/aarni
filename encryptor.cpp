@@ -23,12 +23,14 @@ namespace Aarni
 {
 
 Encryptor::Encryptor(QObject* parent)
-    : QObject(parent), ui_(new MainDialog)
+    : QObject(parent), ui_(new MainDialog), canceled_(false)
 {
     ui_->show();
 
     connect(ui_, SIGNAL(encryptRequested(EncryptionParameter&)),
             this, SLOT(encrypt(EncryptionParameter&)));
+    connect(ui_, SIGNAL(encryptCanceled()),
+            this, SLOT(cancelEncrypt()));
     connect(this, SIGNAL(encryptProgress(int)),
             ui_, SLOT(setEncryptProgress(int)));
     connect(this, SIGNAL(encryptCompleted(int)),
@@ -142,6 +144,15 @@ void Encryptor::encrypt(EncryptionParameter& param)
 
     while (left > BLOCK_SIZE)
     {
+        if (canceled_)
+        {
+            canceled_ = true;
+            delete cipher;
+            delete md;
+            emit encryptCompleted(ERROR_ENCRYPTION_CANCELED);
+            return;
+        }
+
         input = in.read(BLOCK_SIZE);
         cipher->update(input, output);
         if (ENCRYPT_MODE == param.mode_)
@@ -200,6 +211,11 @@ void Encryptor::encrypt(EncryptionParameter& param)
     delete md;
     emit encryptProgress(128);
     emit encryptCompleted(ERROR_SUCCESS);
+}
+
+void Encryptor::cancelEncrypt()
+{
+    canceled_ = true;
 }
 
 }
