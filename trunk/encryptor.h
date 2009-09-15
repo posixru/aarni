@@ -64,9 +64,11 @@ signals:
 
 private slots:
     void encrypt(EncryptionParameter& param);
+    void cancelEncrypt();
 
 private:
     MainDialog* ui_;
+    bool canceled_;
 };
 
 }

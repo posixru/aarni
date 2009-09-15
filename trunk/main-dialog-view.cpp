@@ -116,6 +116,7 @@ MainDialog::MainDialog(QWidget *parent)
     dlgProgress_->setAutoReset(false);
     dlgProgress_->setWindowModality(Qt::WindowModal);
     dlgProgress_->setWindowTitle(QObject::tr("WINDOW_TITLE"));
+    connect(dlgProgress_, SIGNAL(canceled()), this, SLOT(cancelEncrypt()));
 }
 
 MainDialog::~MainDialog()
@@ -225,6 +226,11 @@ void MainDialog::changePreferenceDescription(int index)
     {
         lblPreference_->setText(QObject::tr("STRATEGY_FASTER_DESC"));
     }
+}
+
+void MainDialog::cancelEncrypt()
+{
+    emit encryptCanceled();
 }
 
 void MainDialog::requestEncrypt(CIPHER_OP_MODE mode)

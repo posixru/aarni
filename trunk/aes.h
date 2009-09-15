@@ -49,7 +49,7 @@ public:
     // Complete the encryption/decryption.
     virtual void doFinal(QByteArray& out);
 
-//private:
+private:
     // Schedule the key into the encryption/decryption key.
     virtual void scheduleKey();
 
