@@ -13,24 +13,22 @@
  * Lesser General Public License for more details.
  */
 
-#include <QApplication>
+#include <QtGui/QApplication>
 #include <QLocale>
 #include <QTranslator>
 
 #include "encryptor.h"
+#include "main-dialog.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
     QTranslator trans;
-    if (!trans.load(":/trans/lang_" + QLocale::system().name()))
-    {
-        trans.load(":/trans/lang_en");
-    }
+    trans.load(":/lang/lang_en");
     app.installTranslator(&trans);
 
-    Aarni::Encryptor encryptor;
+    Aarni::MainDialog dlg;
 
     return app.exec();
 }
