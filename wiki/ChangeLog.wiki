@@ -1,6 +1,8 @@
 #summary The change log of each release.
 #labels Featured
 
+  * 0.2.0
+    # Support folder encryption and compression.
   * 0.1.4
     # Fix the bug of handling the last block.
     # The source code is available at this repository.
