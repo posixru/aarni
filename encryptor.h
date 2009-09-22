@@ -16,59 +16,101 @@
 #ifndef __AARNI_ENCRYPTOR_H__
 #define __AARNI_ENCRYPTOR_H__
 
-#include <QObject>
-#include <QString>
+#include <QThread>
+#include <QVector>
 
-#include "const.h"
-#include "main-dialog-view.h"
+#include "aes.h"
+#include "sha384.h"
 
 namespace Aarni
 {
 
-class MainDialog;
-
+// This structure describes the parameters for encryption.
 struct EncryptionParameter
 {
-    CIPHER_OP_MODE mode_;
-    QString cipher_;
-    QString hash_;
+    bool isEncryption_;
     QString source_;
     QString destination_;
     QString password_;
-    bool deleteSource_;
 };
 
+// This structure describes the file header.
 struct FileHeader
 {
-    char magic_[2];
-    char version_;
-    char cipher_;
-    char hash_;
-    char compress_;
-    unsigned int encryptedBlockOffset_;
-    unsigned int digestOffset_;
+    quint16 magic_;
+    quint8 version_;
+    quint8 flags_;
+    quint32 dirEntryNum_;
+    quint64 dirOffset_;
+    quint8 digest_[48];
 };
 
-class Encryptor : public QObject
+// This structure describes the directory entry.
+struct DirectoryEntry
+{
+    quint64 offset_;
+    quint64 length_;
+    QString name_;
+};
+
+// This class encrypts/decrypts the given file/directory in a separate thread.
+class Encryptor : public QThread
 {
     Q_OBJECT
 
 public:
-    Encryptor(QObject* parent = 0);
-    ~Encryptor();
+    Encryptor(QObject* parent = NULL);
+
+    // Encrypt the files according to the parameters.
+    //
+    // Parameter:
+    //  param - the encryption parameter
+    //
+    // Return value:
+    //  ERROR_SUCCESS - success
+    //  ERROR_ALREADY_RUNNING - the thread is already running
+    //  ERROR_EMPTY_PASSWORD - the password is empty
+    //  ERROR_SOURCE_NOT_EXIST - the source doesn't exist
+    //  ERROR_DESTINATION_EXISTED - the destination already existed but still initialized
+    quint32 encrypt(const EncryptionParameter& param);
+
+    // Check if the specific file is encrypted.
+    //
+    // Parameter:
+    //  name - the file to be checked
+    //
+    // Return value:
+    //  true - the file is encrypted
+    //  false - the file is not encrypted
+    static bool isEncryptedFile(const QString& name);
 
 signals:
-    void encryptStarted();
-    void encryptProgress(int progress);
-    void encryptCompleted(int result);
+    // This signal is emitted when the encryption is completed.
+    void encryptionCompleted(quint32 result);
 
-private slots:
-    void encrypt(EncryptionParameter& param);
-    void cancelEncrypt();
+protected:
+    // Encrypt/decrypt the given files based on the parameter.
+    void run();
 
 private:
-    MainDialog* ui_;
-    bool canceled_;
+    // Prepare the key from the password.
+    void prepareKey();
+
+    // Encrypt/decrypt.
+    void encrypt();
+    void decrypt();
+
+    // Traverse the directory for encryption.
+    void traverse(const QString& path);
+
+    // Encrypt a single file.
+    void encryptFile(const QString& file);
+
+    // The variables used.
+    AES aes_;
+    SHA384 sha_;
+    EncryptionParameter param_;
+    QVector<DirectoryEntry> directory_;
 };
 
 }

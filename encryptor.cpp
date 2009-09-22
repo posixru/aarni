@@ -13,209 +13,312 @@
  * Lesser General Public License for more details.
  */
 
+#include <QDateTime>
+#include <QDir>
 #include <QFile>
+#include <QFileInfo>
+#include <QtEndian>
 
-#include "cipher.h"
+#include "const.h"
 #include "encryptor.h"
-#include "message-digest.h"
 
 namespace Aarni
 {
 
 Encryptor::Encryptor(QObject* parent)
-    : QObject(parent), ui_(new MainDialog), canceled_(false)
+    : QThread(parent)
 {
-    ui_->show();
-
-    connect(ui_, SIGNAL(encryptRequested(EncryptionParameter&)),
-            this, SLOT(encrypt(EncryptionParameter&)));
-    connect(ui_, SIGNAL(encryptCanceled()),
-            this, SLOT(cancelEncrypt()));
-    connect(this, SIGNAL(encryptProgress(int)),
-            ui_, SLOT(setEncryptProgress(int)));
-    connect(this, SIGNAL(encryptCompleted(int)),
-            ui_, SLOT(setEncryptCompleted(int)));
+    // do nothing
 }
 
-Encryptor::~Encryptor()
+// Encrypt the files according to the parameters.
+quint32 Encryptor::encrypt(const EncryptionParameter& param)
 {
-    delete ui_;
-}
-
-void Encryptor::encrypt(EncryptionParameter& param)
-{
-    // check password
+    if (isRunning())
+    {
+        return ERROR_ALREADY_RUNNING;
+    }
     if (param.password_.isEmpty())
     {
-        emit encryptCompleted(ERROR_NO_PASSWORD);
-        return;
+        return ERROR_EMPTY_PASSWORD;
     }
-
-    // open file
-    QFile in(param.source_);
-    QFile out(param.destination_);
-    if (!in.open(QIODevice::ReadOnly) || !out.open(QIODevice::WriteOnly))
+    if (!QFile::exists(param.source_))
     {
-        emit encryptCompleted(ERROR_FILE_OPEN_FAILED);
-        return;
+        return ERROR_SOURCE_NOT_EXIST;
     }
 
-    // write or verify the header
-    FileHeader header;
-    if (ENCRYPT_MODE == param.mode_)
+    quint32 result = ERROR_SUCCESS;
+    if (QFile::exists(param.destination_))
     {
-        // write the header
-        header.magic_[0] = FILE_MAGIC_BYTE1;
-        header.magic_[1] = FILE_MAGIC_BYTE2;
-        header.version_ = FILE_VERSION;
-        if (ALGORITHM_CIPHER_AES == param.cipher_)
-        {
-            header.cipher_ = ALGORITHM_CIPHER_AES_ID;
-        }
-        else
-        {
-            header.cipher_ = ALGORITHM_CIPHER_ARC4_ID;
-        }
-        header.hash_ = ALGORITHM_HASH_RIPEMD160_ID;
-        header.compress_ = ALGORITHM_NONE_ID;
-        header.encryptedBlockOffset_ = sizeof(header);
-        header.digestOffset_ = header.encryptedBlockOffset_ + in.size();
-        out.write((char*)&header, sizeof(header));
-    }
-    else
-    {
-        // verify the header
-        in.read((char*)&header, sizeof(header));
-        if (FILE_MAGIC_BYTE1 != header.magic_[0] || FILE_MAGIC_BYTE2 != header.magic_[1])
-        {
-            emit encryptCompleted(ERROR_FILE_INVALID_FORMAT);
-            return;
-        }
-
-        // set up the algorithms
-        switch (header.hash_)
-        {
-            case ALGORITHM_HASH_RIPEMD160_ID:
-                param.hash_ = ALGORITHM_HASH_RIPEMD160;
-                break;
-            default:
-                param.hash_ = ALGORITHM_HASH_RIPEMD160;
-                break;
-        }
-
-        switch (header.cipher_)
-        {
-            case ALGORITHM_CIPHER_AES_ID:
-                param.cipher_ = ALGORITHM_CIPHER_AES;
-                break;
-            case ALGORITHM_CIPHER_ARC4_ID:
-                param.cipher_ = ALGORITHM_CIPHER_ARC4;
-                break;
-            default:
-                param.cipher_ = ALGORITHM_CIPHER_AES;
-                break;
-        }
+        result = ERROR_DESTINATION_EXISTED;
     }
 
-    // initialize cipher
-    QByteArray output;
-    Cipher* cipher = Cipher::getInstance(param.cipher_);
-    MessageDigest* md = MessageDigest::getInstance(param.hash_);
-    md->digest(param.password_.toAscii(), output);
-    if (ALGORITHM_CIPHER_AES == param.cipher_)
-    {
-        output.resize(32);
-        for (int i = 31; i >= 16; i--)
-        {
-            output[i] = output[i - 12];
-        }
-    }
-    cipher->init(param.mode_, output);
+    param_ = param;
 
-    // encrypt or decrypt
-    QByteArray input;
-    md->reset();
-    long long size = in.size();
-    long long left = size;
-    if (DECRYPT_MODE == param.mode_)
-    {
-        left -= (DIGEST_SIZE + sizeof(FileHeader));
-    }
+    start();
 
-    while (left > BLOCK_SIZE)
-    {
-        if (canceled_)
-        {
-            canceled_ = true;
-            delete cipher;
-            delete md;
-            emit encryptCompleted(ERROR_ENCRYPTION_CANCELED);
-            return;
-        }
-
-        input = in.read(BLOCK_SIZE);
-        cipher->update(input, output);
-        if (ENCRYPT_MODE == param.mode_)
-        {
-            md->update(input);
-        }
-        else
-        {
-            md->update(output);
-        }
-        out.write(output);
-        emit encryptProgress(((size - left) << 7) / size);
-        left -= BLOCK_SIZE;
-    }
-
-    input = in.read(left);
-    cipher->update(input, output);
-    if (ENCRYPT_MODE == param.mode_)
-    {
-        md->update(input);
-    }
-    else
-    {
-        md->update(output);
-    }
-    out.write(output);
-
-    // write or verify the digest
-    md->digest(output);
-    if (ENCRYPT_MODE == param.mode_)
-    {
-        // write the digest
-        out.write(output);
-    }
-    else
-    {
-        // verify the digest
-        input = in.read(DIGEST_SIZE);
-        if (input != output)
-        {
-            emit encryptCompleted(ERROR_FILE_CORRUPTED);
-            delete cipher;
-            delete md;
-            return;
-        }
-    }
-
-    // delete the source file when required
-    if (param.deleteSource_)
-    {
-        in.remove();
-    }
-
-    // encryption completed
-    delete cipher;
-    delete md;
-    emit encryptProgress(128);
-    emit encryptCompleted(ERROR_SUCCESS);
+    return result;
 }
 
-void Encryptor::cancelEncrypt()
+// Check if the specific file is encrypted.
+bool Encryptor::isEncryptedFile(const QString& name)
 {
-    canceled_ = true;
+    QFile file(name);
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        return false;
+    }
+
+    FileHeader header;
+    file.read((char*)&header, sizeof(header));
+    if (qToLittleEndian<quint16>(FILE_MAGIC) != header.magic_)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+// Encrypt/decrypt the given files based on the parameter.
+void Encryptor::run()
+{
+    directory_.clear();
+
+    prepareKey();
+
+    if (param_.isEncryption_)
+    {
+        encrypt();
+    }
+    else
+    {
+        decrypt();
+    }
+}
+
+// Prepare the key from the password.
+void Encryptor::prepareKey()
+{
+    sha_.update(param_.password_.toAscii());
+    QByteArray out;
+    sha_.digest(out);
+
+    // the first 128 bits as the key for plaintext,
+    // the second 128 bits as the key for tweak,
+    // the third 128 bits as the initial tweak value
+    aes_.init(QByteArray(out.data(), 32), QByteArray(out.data() + 32, 16));
+}
+
+// Encrypt.
+void Encryptor::encrypt()
+{
+    // reserve the space for the header
+    QFile file(param_.destination_);
+    file.open(QIODevice::ReadWrite);
+    file.resize(sizeof(FileHeader));
+
+    // encrypt files
+    aes_.reset();
+    traverse(param_.source_);
+
+    // write the header
+    FileHeader header;
+    header.magic_ = qToLittleEndian<quint16>(FILE_MAGIC);
+    header.version_ = FILE_VERSION;
+    header.flags_ = FILE_FLAG_NONE;
+    header.dirOffset_ = qToLittleEndian<quint64>(file.size());
+    int size = directory_.size();
+    header.dirEntryNum_ = qToLittleEndian<quint32>(directory_.size());
+    QByteArray digest;
+    sha_.digest(digest);
+    memcpy(header.digest_, digest.data(), 48);
+    file.seek(0);
+    file.write((char*)&header, sizeof(header));
+
+    // compress, encrypt and write the directory
+    quint64 tmp;
+    QByteArray buf1;
+    file.seek(file.size());
+    for (int i = 0; i < size; i++)
+    {
+        tmp = qToLittleEndian<quint64>(directory_[i].offset_);
+        buf1.append((char*)&tmp, 8);
+
+        tmp = qToLittleEndian<quint64>(directory_[i].length_);
+        buf1.append((char*)&tmp, 8);
+
+        tmp = qToLittleEndian<quint64>(directory_[i].name_.toAscii().length());
+        buf1.append((char*)&tmp, 8);
+
+        buf1.append(directory_[i].name_);
+    }
+
+    QByteArray buf2 = qCompress(buf1, 9);
+    aes_.reset();
+    aes_.encrypt(buf2, buf1);
+    file.write(buf1);
+
+    // encryption completes
+    emit encryptionCompleted(ERROR_SUCCESS);
+}
+
+// Decrypt.
+void Encryptor::decrypt()
+{
+    // verify the header
+    if (!isEncryptedFile(param_.source_))
+    {
+        emit encryptionCompleted(ERROR_INVALID_FILE_FORMAT);
+        return;
+    }
+
+    QFile src(param_.source_);
+    src.open(QIODevice::ReadOnly);
+    FileHeader header;
+
+    // decrypt, uncompress, and read the directory
+    src.read((char*)&header, sizeof(header));
+    quint64 tmp64 = qFromLittleEndian<quint64>(header.dirOffset_);
+    src.seek(tmp64);
+    QByteArray buf1 = src.read(src.size() - tmp64);
+    QByteArray buf2;
+    aes_.reset();
+    aes_.decrypt(buf1, buf2);
+    buf1 = qUncompress(buf2);
+
+    DirectoryEntry entry;
+    quint32 tmp32 = qFromLittleEndian<quint32>(header.dirEntryNum_);
+    tmp64 = 0;
+    for (quint32 i = 0; i < tmp32; i++)
+    {
+        entry.offset_ = qFromLittleEndian<quint64>((uchar*)buf1.data() + tmp64);
+        tmp64 += 8;
+
+        entry.length_ = qFromLittleEndian<quint64>((uchar*)buf1.data() + tmp64);
+        tmp64 += 8;
+
+        quint64 tmp =  qFromLittleEndian<quint64>((uchar*)buf1.data() + tmp64);
+        tmp64 += 8;
+
+        buf2.clear();
+        buf2.append(buf1.data() + tmp64, tmp);
+        tmp64 += tmp;
+        entry.name_ = param_.destination_ + QDir::separator() + buf2;
+
+        directory_.push_back(entry);
+    }
+
+    // decrypt files
+    QDir().mkpath(param_.destination_);
+    aes_.reset();
+    int size = directory_.size();
+    for (int i = 0; i < size; i++)
+    {
+        // decrypt and decompress
+        src.seek(directory_[i].offset_);
+        buf1 = src.read(directory_[i].length_);
+        aes_.decrypt(buf1, buf2);
+        buf1 = qUncompress(buf2);
+
+        // remove the padding
+        buf1.resize(buf1.length() - buf1[buf1.length() - 1]);
+
+        // compute the digest
+        sha_.update(buf1);
+
+        // write the file
+        QFile dst(directory_[i].name_);
+        dst.open(QIODevice::WriteOnly);
+        dst.write(buf1);
+    }
+
+    // verify the digest
+    QByteArray digest;
+    sha_.digest(digest);
+    for (int i = 0; i < digest.length(); i++)
+    {
+        if ((quint8)digest.at(i) != header.digest_[i])
+        {
+            emit encryptionCompleted(ERROR_CORRUPTED_FILE);
+            return;
+        }
+    }
+
+    emit encryptionCompleted(ERROR_SUCCESS);
+}
+
+// Traverse the directory for encryption.
+void Encryptor::traverse(const QString& path)
+{
+    QDir dir(path);
+    if (!dir.exists())
+    {
+        encryptFile(path);
+        return;
+    }
+
+    QStringList entryList = dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot);
+    QStringList::const_iterator iter;
+    for (iter = entryList.constBegin(); iter != entryList.constEnd(); ++iter)
+    {
+        QString entry = path + QDir::separator() + (*iter);
+        if (QDir(entry).exists())
+        {
+            traverse(entry);
+        }
+        else
+        {
+            encryptFile(entry);
+        }
+    }
+}
+
+// Encrypt a single file.
+void Encryptor::encryptFile(const QString& file)
+{
+    // in case the destination is in the directory
+    if (param_.destination_ == file)
+    {
+        return;
+    }
+
+    // read the file
+    QFile src(file);
+    src.open(QIODevice::ReadOnly);
+    QByteArray buf1 = src.readAll();
+
+    // compute digest
+    sha_.update(buf1);
+
+    // pad the file
+    quint8 tmp = 16 - buf1.length() % 16;
+    buf1.append(QByteArray(tmp, tmp));
+
+    // compress and encrypt
+    QByteArray buf2 = qCompress(buf1, 9);
+    aes_.encrypt(buf2, buf1);
+
+    // write the processed data to the end of the file
+    QFile dst(param_.destination_);
+    dst.open(QIODevice::ReadWrite);
+    quint64 offset = dst.size();
+    dst.seek(offset);
+    dst.write(buf1);
+
+    // add the information to the directory
+    DirectoryEntry entry;
+    int length = file.length() - param_.source_.length();
+    if (0 < length)
+    {
+        entry.name_ = file.right(length);
+    }
+    else
+    {
+        entry.name_ = QFileInfo(file).fileName();
+    }
+    entry.offset_ = offset;
+    entry.length_ = buf1.length();
+    directory_.push_back(entry);
 }
 
 }

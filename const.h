@@ -16,51 +16,33 @@
 #ifndef __AARNI_CONST_H__
 #define __AARNI_CONST_H__
 
+
 #include <QString>
 
-namespace Aarni
-{
 
-// the magic number to identify the file
-const char FILE_MAGIC_BYTE1 = 0x45;
-const char FILE_MAGIC_BYTE2 = 0x41;
+// Constants used.
+const quint16 FILE_MAGIC = 0x4541;
+const quint8 FILE_VERSION = 0x02;
 
-// current file version
-const char FILE_VERSION = 0x01;
+const quint8 FILE_FLAG_NONE = 0x00;
 
-// algorithm names and ids
-const QString ALGORITHM_NONE = "NONE";
-const char ALGORITHM_NONE_ID = 0x00;
 
-const QString ALGORITHM_HASH_RIPEMD160 = "RIPEMD160";
-const char ALGORITHM_HASH_RIPEMD160_ID = 0x01;
+// Error codes.
+const quint32 ERROR_SUCCESS = 0;
 
-const QString ALGORITHM_HASH_SHA256 = "SHA256";
-const char ALGORITHM_HASH_SHA256_ID = 0x02;
+const quint32 ERROR_NOT_INITIALIZED = 100;
+const quint32 ERROR_DATA_UNIT_TOO_LONG = 101;
+const quint32 ERROR_DATA_UNIT_TOO_SHORT = 102;
+const quint32 ERROR_INVALID_KEY_LENGTH = 103;
+const quint32 ERROR_INVALID_TWEAK_LENGTH = 104;
 
-const QString ALGORITHM_CIPHER_AES = "AES";
-const char ALGORITHM_CIPHER_AES_ID = 0x01;
+const quint32 ERROR_EMPTY_PASSWORD = 200;
+const quint32 ERROR_SOURCE_NOT_EXIST = 201;
+const quint32 ERROR_DESTINATION_EXISTED = 202;
+const quint32 ERROR_ALREADY_RUNNING = 203;
 
-const QString ALGORITHM_CIPHER_ARC4 = "ARC4";
-const char ALGORITHM_CIPHER_ARC4_ID = 0x02;
+const quint32 ERROR_INVALID_FILE_FORMAT = 300;
+const quint32 ERROR_CORRUPTED_FILE = 301;
 
-// the file is divided into blocks when encrypted
-const int BLOCK_SIZE = 512;
-
-// the length of the digest
-const int DIGEST_SIZE = 20;
-
-// operation mode
-enum CIPHER_OP_MODE {ENCRYPT_MODE, DECRYPT_MODE};
-
-// error code
-const int ERROR_SUCCESS = 0;
-const int ERROR_NO_PASSWORD = 1;
-const int ERROR_ENCRYPTION_CANCELED = 2;
-const int ERROR_FILE_OPEN_FAILED = 10;
-const int ERROR_FILE_INVALID_FORMAT = 11;
-const int ERROR_FILE_CORRUPTED = 12;
-
-}
 
 #endif // __AARNI_CONST_H__

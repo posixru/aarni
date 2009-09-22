@@ -13,13 +13,16 @@
  * Lesser General Public License for more details.
  */
 
+#include <QtEndian>
+
 #include "aes.h"
-using namespace std;
+#include "const.h"
 
 namespace Aarni
 {
 
-const unsigned int AES::aesTe0[256] = {
+// The constants used.
+const quint32 AES::aesTe0_[256] = {
     0xc66363a5U, 0xf87c7c84U, 0xee777799U, 0xf67b7b8dU,
     0xfff2f20dU, 0xd66b6bbdU, 0xde6f6fb1U, 0x91c5c554U,
     0x60303050U, 0x02010103U, 0xce6767a9U, 0x562b2b7dU,
@@ -86,7 +89,7 @@ const unsigned int AES::aesTe0[256] = {
     0x7bb0b0cbU, 0xa85454fcU, 0x6dbbbbd6U, 0x2c16163aU,
 };
 
-const unsigned int AES::aesTe1[256] = {
+const quint32 AES::aesTe1_[256] = {
     0xa5c66363U, 0x84f87c7cU, 0x99ee7777U, 0x8df67b7bU,
     0x0dfff2f2U, 0xbdd66b6bU, 0xb1de6f6fU, 0x5491c5c5U,
     0x50603030U, 0x03020101U, 0xa9ce6767U, 0x7d562b2bU,
@@ -153,7 +156,7 @@ const unsigned int AES::aesTe1[256] = {
     0xcb7bb0b0U, 0xfca85454U, 0xd66dbbbbU, 0x3a2c1616U,
 };
 
-const unsigned int AES::aesTe2[256] = {
+const quint32 AES::aesTe2_[256] = {
     0x63a5c663U, 0x7c84f87cU, 0x7799ee77U, 0x7b8df67bU,
     0xf20dfff2U, 0x6bbdd66bU, 0x6fb1de6fU, 0xc55491c5U,
     0x30506030U, 0x01030201U, 0x67a9ce67U, 0x2b7d562bU,
@@ -220,7 +223,7 @@ const unsigned int AES::aesTe2[256] = {
     0xb0cb7bb0U, 0x54fca854U, 0xbbd66dbbU, 0x163a2c16U,
 };
 
-const unsigned int AES::aesTe3[256] = {
+const quint32 AES::aesTe3_[256] = {
     0x6363a5c6U, 0x7c7c84f8U, 0x777799eeU, 0x7b7b8df6U,
     0xf2f20dffU, 0x6b6bbdd6U, 0x6f6fb1deU, 0xc5c55491U,
     0x30305060U, 0x01010302U, 0x6767a9ceU, 0x2b2b7d56U,
@@ -287,7 +290,7 @@ const unsigned int AES::aesTe3[256] = {
     0xb0b0cb7bU, 0x5454fca8U, 0xbbbbd66dU, 0x16163a2cU,
 };
 
-const unsigned int AES::aesTe4[256] = {
+const quint32 AES::aesTe4_[256] = {
     0x63636363U, 0x7c7c7c7cU, 0x77777777U, 0x7b7b7b7bU,
     0xf2f2f2f2U, 0x6b6b6b6bU, 0x6f6f6f6fU, 0xc5c5c5c5U,
     0x30303030U, 0x01010101U, 0x67676767U, 0x2b2b2b2bU,
@@ -354,7 +357,7 @@ const unsigned int AES::aesTe4[256] = {
     0xb0b0b0b0U, 0x54545454U, 0xbbbbbbbbU, 0x16161616U,
 };
 
-const unsigned int AES::aesTd0[256] = {
+const quint32 AES::aesTd0_[256] = {
     0x51f4a750U, 0x7e416553U, 0x1a17a4c3U, 0x3a275e96U,
     0x3bab6bcbU, 0x1f9d45f1U, 0xacfa58abU, 0x4be30393U,
     0x2030fa55U, 0xad766df6U, 0x88cc7691U, 0xf5024c25U,
@@ -421,7 +424,7 @@ const unsigned int AES::aesTd0[256] = {
     0x7bcb8461U, 0xd532b670U, 0x486c5c74U, 0xd0b85742U,
 };
 
-const unsigned int AES::aesTd1[256] = {
+const quint32 AES::aesTd1_[256] = {
     0x5051f4a7U, 0x537e4165U, 0xc31a17a4U, 0x963a275eU,
     0xcb3bab6bU, 0xf11f9d45U, 0xabacfa58U, 0x934be303U,
     0x552030faU, 0xf6ad766dU, 0x9188cc76U, 0x25f5024cU,
@@ -488,7 +491,7 @@ const unsigned int AES::aesTd1[256] = {
     0x617bcb84U, 0x70d532b6U, 0x74486c5cU, 0x42d0b857U,
 };
 
-const unsigned int AES::aesTd2[256] = {
+const quint32 AES::aesTd2_[256] = {
     0xa75051f4U, 0x65537e41U, 0xa4c31a17U, 0x5e963a27U,
     0x6bcb3babU, 0x45f11f9dU, 0x58abacfaU, 0x03934be3U,
     0xfa552030U, 0x6df6ad76U, 0x769188ccU, 0x4c25f502U,
@@ -555,7 +558,7 @@ const unsigned int AES::aesTd2[256] = {
     0x84617bcbU, 0xb670d532U, 0x5c74486cU, 0x5742d0b8U,
 };
 
-const unsigned int AES::aesTd3[256] = {
+const quint32 AES::aesTd3_[256] = {
     0xf4a75051U, 0x4165537eU, 0x17a4c31aU, 0x275e963aU,
     0xab6bcb3bU, 0x9d45f11fU, 0xfa58abacU, 0xe303934bU,
     0x30fa5520U, 0x766df6adU, 0xcc769188U, 0x024c25f5U,
@@ -622,7 +625,7 @@ const unsigned int AES::aesTd3[256] = {
     0xcb84617bU, 0x32b670d5U, 0x6c5c7448U, 0xb85742d0U,
 };
 
-const unsigned int AES::aesTd4[256] = {
+const quint32 AES::aesTd4_[256] = {
     0x52525252U, 0x09090909U, 0x6a6a6a6aU, 0xd5d5d5d5U,
     0x30303030U, 0x36363636U, 0xa5a5a5a5U, 0x38383838U,
     0xbfbfbfbfU, 0x40404040U, 0xa3a3a3a3U, 0x9e9e9e9eU,
@@ -689,126 +692,96 @@ const unsigned int AES::aesTd4[256] = {
     0x55555555U, 0x21212121U, 0x0c0c0c0cU, 0x7d7d7d7dU,
 };
 
-const unsigned int AES::aesRCon[10] = {
+const quint32 AES::aesRCon_[10] = {
     0x01000000, 0x02000000, 0x04000000, 0x08000000,
     0x10000000, 0x20000000, 0x40000000, 0x80000000,
     0x1B000000, 0x36000000,
 };
 
+// Macros used.
 #define SWAP(x) (_lrotl(x, 8) & 0x00ff00ff | _lrotr(x, 8) & 0xff00ff00)
 
 #ifdef _MSC_VER
-#define GETU32(p) SWAP(*((unsigned int*)(p)))
-#define PUTU32(ct, st) { *((unsigned int*)(ct)) = SWAP((st)); }
+#define GETU32(p) SWAP(*((quint32*)(p)))
+#define PUTU32(ct, st) { *((quint32*)(ct)) = SWAP((st)); }
 #else
 #define GETU32(pt) \
-    (((unsigned int)(pt)[0] << 24) \
-    ^ ((unsigned int)(pt)[1] << 16) \
-    ^ ((unsigned int)(pt)[2] <<  8) \
-    ^ ((unsigned int)(pt)[3]))
+    (((quint32)(pt)[0] << 24) \
+    ^ ((quint32)(pt)[1] << 16) \
+    ^ ((quint32)(pt)[2] <<  8) \
+    ^ ((quint32)(pt)[3]))
 #define PUTU32(ct, st) \
-    { (ct)[0] = (unsigned char)((st) >> 24); \
-      (ct)[1] = (unsigned char)((st) >> 16); \
-      (ct)[2] = (unsigned char)((st) >>  8); \
-      (ct)[3] = (unsigned char)(st); }
+    { (ct)[0] = (quint8)((st) >> 24); \
+      (ct)[1] = (quint8)((st) >> 16); \
+      (ct)[2] = (quint8)((st) >>  8); \
+      (ct)[3] = (quint8)(st); }
 #endif
 
-// Create a cipher using AES.
-AES::AES(QObject* parent)
-    : Cipher(ALGORITHM_CIPHER_AES, parent)
+// Constructor.
+AES::AES()
+    : initialized_(false)
 {
     // do nothing
 }
 
-// Reset the digest to the initial state.
-void AES::reset()
+// Initialize the key and the tweak.
+quint32 AES::init(const QByteArray& key, const QByteArray& tweak)
+{
+    keyLength_ = key.length() << 2;
+    if (128 != keyLength_ && 192 != keyLength_ && 256 != keyLength_)
+    {
+        return ERROR_INVALID_KEY_LENGTH;
+    }
+    if (16 != tweak.length())
+    {
+        return ERROR_INVALID_TWEAK_LENGTH;
+    }
+
+    aesExpandEncryptionKey((quint8*)key.data(), expandedKey1_);
+    aesExpandDecryptionKey((quint8*)key.data(), expandedKey2_);
+    aesExpandEncryptionKey((quint8*)key.data() + (keyLength_ >> 3), expandedKey3_);
+
+    memcpy(initialEncTweak_, tweak.data(), 16);
+    memcpy(initialDecTweak_, tweak.data(), 16);
+
+    initialized_ = true;
+    reset();
+
+    return ERROR_SUCCESS;
+}
+
+// Reset to the initial state.
+quint32 AES::reset()
 {
     if (!initialized_)
     {
-        return;
+        return ERROR_NOT_INITIALIZED;
     }
 
-    memset(tweak_, 0, 16);
-}
+    memcpy(currentEncTweak_, initialEncTweak_, 16);
+    memcpy(currentDecTweak_, initialDecTweak_, 16);
 
-// Continue the encryption/decryption operation.
-void AES::update(const QByteArray& in, QByteArray& out)
-{
-    if (!initialized_)
-    {
-        return;
-    }
-
-    // encrypt
-    if (ENCRYPT_MODE == opmode_)
-    {
-        xtsEncryptUnit(in, out);
-    }
-    else
-    {
-        xtsDecryptUnit(in, out);
-    }
-
-    // tweak += 512
-    tweak_[1] += 2;
-    for (int i = 2; i < 16; i++)
-    {
-        if (0 == tweak_[i - 1])
-        {
-            tweak_[i]++;
-        }
-        else
-        {
-            break;
-        }
-    }
-}
-
-// Complete the encryption/decryption.
-void AES::doFinal(const QByteArray& in, QByteArray& out)
-{
-    if (!initialized_)
-    {
-        return;
-    }
-
-    update(in, out);
-}
-
-// Complete the encryption/decryption.
-void AES::doFinal(QByteArray& out)
-{
-    if (!initialized_)
-    {
-        return;
-    }
-
-    doFinal(QByteArray(), out);
-}
-
-// Schedule the key into the encryption/decryption key.
-void AES::scheduleKey()
-{
-    if (ENCRYPT_MODE == opmode_)
-    {
-        aesExpandEncryptionKey((unsigned char*)key_.data(), expandedKey1_);
-    }
-    else
-    {
-        aesExpandDecryptionKey((unsigned char*)key_.data(), expandedKey1_);
-    }
-    aesExpandEncryptionKey((unsigned char*)key_.data() + 16, expandedKey2_);
+    return ERROR_SUCCESS;
 }
 
 // Encrypt a data unit in the XTS mode.
-void AES::xtsEncryptUnit(const QByteArray& in, QByteArray& out)
+quint32 AES::encrypt(const QByteArray& in, QByteArray& out)
 {
-    unsigned char tweak[16] = {0};
-    aesEncryptBlock(expandedKey2_, tweak_, tweak);
-    long long left = in.length();
+    if (!initialized_)
+    {
+        return ERROR_NOT_INITIALIZED;
+    }
+    if (16 > in.length())
+    {
+        return ERROR_DATA_UNIT_TOO_SHORT;
+    }
+
+    quint8 tweak[16] = {0};
+    aesEncryptBlock(expandedKey3_, currentEncTweak_, tweak);
+    qint64 left = in.length();
     out.resize(left);
-    const unsigned char* input = (unsigned char*)in.data();
-    unsigned char* output = (unsigned char*)out.data();
+    const quint8* input = (quint8*)in.data();
+    quint8* output = (quint8*)out.data();
 
     // encrypt the first blocks
     out.resize(left);
@@ -830,8 +803,8 @@ void AES::xtsEncryptUnit(const QByteArray& in, QByteArray& out)
     else
     {
         // data unit is not a multiple of 128-bit blocks
-        unsigned char CC[16] = {0};
-        unsigned char PP[16] = {0};
+        quint8 CC[16] = {0};
+        quint8 PP[16] = {0};
         xtsEncryptBlock(tweak, input, CC);
         left -= 16;
         memcpy(output + 16, CC, left);
@@ -842,17 +815,50 @@ void AES::xtsEncryptUnit(const QByteArray& in, QByteArray& out)
 
         xtsEncryptBlock(tweak, PP, output);
     }
+
+    // tweak += in.length
+    int len = in.length();
+    quint8 length[4];
+    qToLittleEndian<int>(len, length);
+    quint8 carry = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        quint8 tmp = currentEncTweak_[i];
+        currentEncTweak_[i] += (length[i] + carry);
+        carry = (tmp > currentEncTweak_[i]);
+    }
+    for (int i = 4; i < 16; i++)
+    {
+        quint8 tmp = currentEncTweak_[i];
+        currentEncTweak_[i] += carry;
+        carry = (tmp > currentEncTweak_[i]);
+    }
+    if (carry)
+    {
+        return ERROR_DATA_UNIT_TOO_LONG;
+    }
+
+    return ERROR_SUCCESS;
 }
 
 // Decrypt a data unit in the XTS mode.
-void AES::xtsDecryptUnit(const QByteArray& in, QByteArray& out)
+quint32 AES::decrypt(const QByteArray& in, QByteArray& out)
 {
-    unsigned char tweak[16] = {0};
-    aesEncryptBlock(expandedKey2_, tweak_, tweak);
-    long long left = in.length();
+    if (!initialized_)
+    {
+        return ERROR_NOT_INITIALIZED;
+    }
+    if (16 > in.length())
+    {
+        return ERROR_DATA_UNIT_TOO_SHORT;
+    }
+
+    quint8 tweak[16] = {0};
+    aesEncryptBlock(expandedKey3_, currentDecTweak_, tweak);
+    qint64 left = in.length();
     out.resize(left);
-    const unsigned char* input = (unsigned char*)in.data();
-    unsigned char* output = (unsigned char*)out.data();
+    const quint8* input = (quint8*)in.data();
+    quint8* output = (quint8*)out.data();
 
     // encrypt the first blocks
     out.resize(left);
@@ -874,9 +880,9 @@ void AES::xtsDecryptUnit(const QByteArray& in, QByteArray& out)
     else
     {
         // data unit is not a multiple of 128-bit blocks
-        unsigned char PP[16] = {0};
-        unsigned char CC[16] = {0};
-        unsigned char tweak2[16];
+        quint8 PP[16] = {0};
+        quint8 CC[16] = {0};
+        quint8 tweak2[16];
         memcpy(tweak2, tweak, 16);
         xtsComputeTweak(tweak2);
         xtsDecryptBlock(tweak2, input, PP);
@@ -887,51 +893,423 @@ void AES::xtsDecryptUnit(const QByteArray& in, QByteArray& out)
 
         xtsDecryptBlock(tweak, CC, output);
     }
+
+    // tweak += in.length
+    int len = in.length();
+    quint8 length[4];
+    qToLittleEndian<int>(len, length);
+    quint8 carry = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        quint8 tmp = currentDecTweak_[i];
+        currentDecTweak_[i] += (length[i] + carry);
+        carry = (tmp > currentDecTweak_[i]);
+    }
+    for (int i = 4; i < 16; i++)
+    {
+        quint8 tmp = currentDecTweak_[i];
+        currentDecTweak_[i] += carry;
+        carry = (tmp > currentDecTweak_[i]);
+    }
+    if (carry)
+    {
+        return ERROR_DATA_UNIT_TOO_LONG;
+    }
+
+    return ERROR_SUCCESS;
+}
+
+// Expand the key into encryption key schedule.
+void AES::aesExpandEncryptionKey(const quint8* key, quint32* expandedKey)
+{
+    qint32 i = 0;
+    quint32 temp;
+
+    expandedKey[0] = GETU32(key     );
+    expandedKey[1] = GETU32(key +  4);
+    expandedKey[2] = GETU32(key +  8);
+    expandedKey[3] = GETU32(key + 12);
+
+    if (keyLength_ == 128)
+    {
+        for (;;)
+        {
+            temp  = expandedKey[3];
+            expandedKey[4] = expandedKey[0] ^
+                             (aesTe4_[(temp >> 16) & 0xff] & 0xff000000) ^
+                             (aesTe4_[(temp >>  8) & 0xff] & 0x00ff0000) ^
+                             (aesTe4_[(temp      ) & 0xff] & 0x0000ff00) ^
+                             (aesTe4_[(temp >> 24)       ] & 0x000000ff) ^
+                             aesRCon_[i];
+            expandedKey[5] = expandedKey[1] ^ expandedKey[4];
+            expandedKey[6] = expandedKey[2] ^ expandedKey[5];
+            expandedKey[7] = expandedKey[3] ^ expandedKey[6];
+            if (++i == 10)
+            {
+                return;
+            }
+            expandedKey += 4;
+        }
+    }
+
+    expandedKey[4] = GETU32(key + 16);
+    expandedKey[5] = GETU32(key + 20);
+    if (keyLength_ == 192)
+    {
+        for (;;)
+        {
+            temp = expandedKey[ 5];
+            expandedKey[ 6] = expandedKey[ 0] ^
+                              (aesTe4_[(temp >> 16) & 0xff] & 0xff000000) ^
+                              (aesTe4_[(temp >>  8) & 0xff] & 0x00ff0000) ^
+                              (aesTe4_[(temp      ) & 0xff] & 0x0000ff00) ^
+                              (aesTe4_[(temp >> 24)       ] & 0x000000ff) ^
+                              aesRCon_[i];
+            expandedKey[ 7] = expandedKey[ 1] ^ expandedKey[ 6];
+            expandedKey[ 8] = expandedKey[ 2] ^ expandedKey[ 7];
+            expandedKey[ 9] = expandedKey[ 3] ^ expandedKey[ 8];
+            if (++i == 8)
+            {
+                return;
+            }
+            expandedKey[10] = expandedKey[ 4] ^ expandedKey[ 9];
+            expandedKey[11] = expandedKey[ 5] ^ expandedKey[10];
+            expandedKey += 6;
+        }
+    }
+
+    expandedKey[6] = GETU32(key + 24);
+    expandedKey[7] = GETU32(key + 28);
+    if (keyLength_ == 256)
+    {
+        for (;;)
+        {
+            temp = expandedKey[ 7];
+            expandedKey[ 8] = expandedKey[ 0] ^
+                              (aesTe4_[(temp >> 16) & 0xff] & 0xff000000) ^
+                              (aesTe4_[(temp >>  8) & 0xff] & 0x00ff0000) ^
+                              (aesTe4_[(temp      ) & 0xff] & 0x0000ff00) ^
+                              (aesTe4_[(temp >> 24)       ] & 0x000000ff) ^
+                              aesRCon_[i];
+            expandedKey[ 9] = expandedKey[ 1] ^ expandedKey[ 8];
+            expandedKey[10] = expandedKey[ 2] ^ expandedKey[ 9];
+            expandedKey[11] = expandedKey[ 3] ^ expandedKey[10];
+            if (++i == 7)
+            {
+                return;
+            }
+            temp = expandedKey[11];
+            expandedKey[12] = expandedKey[ 4] ^
+                              (aesTe4_[(temp >> 24)       ] & 0xff000000) ^
+                              (aesTe4_[(temp >> 16) & 0xff] & 0x00ff0000) ^
+                              (aesTe4_[(temp >>  8) & 0xff] & 0x0000ff00) ^
+                              (aesTe4_[(temp      ) & 0xff] & 0x000000ff);
+            expandedKey[13] = expandedKey[ 5] ^ expandedKey[12];
+            expandedKey[14] = expandedKey[ 6] ^ expandedKey[13];
+            expandedKey[15] = expandedKey[ 7] ^ expandedKey[14];
+            expandedKey += 8;
+        }
+    }
+}
+
+// Expand the key into decryption key schedule.
+void AES::aesExpandDecryptionKey(const quint8* key, quint32* expandedKey)
+{
+    quint32 temp;
+    qint32 rounds = (keyLength_ >> 5) + 6;
+
+    aesExpandEncryptionKey(key, expandedKey);
+
+    for (qint32 i = 0, j = rounds << 2; i < j; i += 4, j -= 4)
+    {
+        temp = expandedKey[i    ]; expandedKey[i    ] = expandedKey[j    ]; expandedKey[j    ] = temp;
+        temp = expandedKey[i + 1]; expandedKey[i + 1] = expandedKey[j + 1]; expandedKey[j + 1] = temp;
+        temp = expandedKey[i + 2]; expandedKey[i + 2] = expandedKey[j + 2]; expandedKey[j + 2] = temp;
+        temp = expandedKey[i + 3]; expandedKey[i + 3] = expandedKey[j + 3]; expandedKey[j + 3] = temp;
+    }
+
+    for (qint32 i = 1; i < rounds; i++)
+    {
+        expandedKey += 4;
+        expandedKey[0] = aesTd0_[aesTe4_[(expandedKey[0] >> 24)       ] & 0xff] ^
+                         aesTd1_[aesTe4_[(expandedKey[0] >> 16) & 0xff] & 0xff] ^
+                         aesTd2_[aesTe4_[(expandedKey[0] >>  8) & 0xff] & 0xff] ^
+                         aesTd3_[aesTe4_[(expandedKey[0]      ) & 0xff] & 0xff];
+        expandedKey[1] = aesTd0_[aesTe4_[(expandedKey[1] >> 24)       ] & 0xff] ^
+                         aesTd1_[aesTe4_[(expandedKey[1] >> 16) & 0xff] & 0xff] ^
+                         aesTd2_[aesTe4_[(expandedKey[1] >>  8) & 0xff] & 0xff] ^
+                         aesTd3_[aesTe4_[(expandedKey[1]      ) & 0xff] & 0xff];
+        expandedKey[2] = aesTd0_[aesTe4_[(expandedKey[2] >> 24)       ] & 0xff] ^
+                         aesTd1_[aesTe4_[(expandedKey[2] >> 16) & 0xff] & 0xff] ^
+                         aesTd2_[aesTe4_[(expandedKey[2] >>  8) & 0xff] & 0xff] ^
+                         aesTd3_[aesTe4_[(expandedKey[2]      ) & 0xff] & 0xff];
+        expandedKey[3] = aesTd0_[aesTe4_[(expandedKey[3] >> 24)       ] & 0xff] ^
+                         aesTd1_[aesTe4_[(expandedKey[3] >> 16) & 0xff] & 0xff] ^
+                         aesTd2_[aesTe4_[(expandedKey[3] >>  8) & 0xff] & 0xff] ^
+                         aesTd3_[aesTe4_[(expandedKey[3]      ) & 0xff] & 0xff];
+    }
+}
+
+// Encrypt a single block.
+void AES::aesEncryptBlock(const quint32* expandedKey, const quint8 in[16], quint8 out[16])
+{
+    quint32 s0, s1, s2, s3, t0, t1, t2, t3;
+
+    s0 = GETU32(in     ) ^ expandedKey[0];
+    s1 = GETU32(in +  4) ^ expandedKey[1];
+    s2 = GETU32(in +  8) ^ expandedKey[2];
+    s3 = GETU32(in + 12) ^ expandedKey[3];
+
+    t0 = aesTe0_[s0 >> 24] ^ aesTe1_[(s1 >> 16) & 0xff] ^ aesTe2_[(s2 >>  8) & 0xff] ^ aesTe3_[s3 & 0xff] ^ expandedKey[ 4];
+    t1 = aesTe0_[s1 >> 24] ^ aesTe1_[(s2 >> 16) & 0xff] ^ aesTe2_[(s3 >>  8) & 0xff] ^ aesTe3_[s0 & 0xff] ^ expandedKey[ 5];
+    t2 = aesTe0_[s2 >> 24] ^ aesTe1_[(s3 >> 16) & 0xff] ^ aesTe2_[(s0 >>  8) & 0xff] ^ aesTe3_[s1 & 0xff] ^ expandedKey[ 6];
+    t3 = aesTe0_[s3 >> 24] ^ aesTe1_[(s0 >> 16) & 0xff] ^ aesTe2_[(s1 >>  8) & 0xff] ^ aesTe3_[s2 & 0xff] ^ expandedKey[ 7];
+
+    s0 = aesTe0_[t0 >> 24] ^ aesTe1_[(t1 >> 16) & 0xff] ^ aesTe2_[(t2 >>  8) & 0xff] ^ aesTe3_[t3 & 0xff] ^ expandedKey[ 8];
+    s1 = aesTe0_[t1 >> 24] ^ aesTe1_[(t2 >> 16) & 0xff] ^ aesTe2_[(t3 >>  8) & 0xff] ^ aesTe3_[t0 & 0xff] ^ expandedKey[ 9];
+    s2 = aesTe0_[t2 >> 24] ^ aesTe1_[(t3 >> 16) & 0xff] ^ aesTe2_[(t0 >>  8) & 0xff] ^ aesTe3_[t1 & 0xff] ^ expandedKey[10];
+    s3 = aesTe0_[t3 >> 24] ^ aesTe1_[(t0 >> 16) & 0xff] ^ aesTe2_[(t1 >>  8) & 0xff] ^ aesTe3_[t2 & 0xff] ^ expandedKey[11];
+
+    t0 = aesTe0_[s0 >> 24] ^ aesTe1_[(s1 >> 16) & 0xff] ^ aesTe2_[(s2 >>  8) & 0xff] ^ aesTe3_[s3 & 0xff] ^ expandedKey[12];
+    t1 = aesTe0_[s1 >> 24] ^ aesTe1_[(s2 >> 16) & 0xff] ^ aesTe2_[(s3 >>  8) & 0xff] ^ aesTe3_[s0 & 0xff] ^ expandedKey[13];
+    t2 = aesTe0_[s2 >> 24] ^ aesTe1_[(s3 >> 16) & 0xff] ^ aesTe2_[(s0 >>  8) & 0xff] ^ aesTe3_[s1 & 0xff] ^ expandedKey[14];
+    t3 = aesTe0_[s3 >> 24] ^ aesTe1_[(s0 >> 16) & 0xff] ^ aesTe2_[(s1 >>  8) & 0xff] ^ aesTe3_[s2 & 0xff] ^ expandedKey[15];
+
+    s0 = aesTe0_[t0 >> 24] ^ aesTe1_[(t1 >> 16) & 0xff] ^ aesTe2_[(t2 >>  8) & 0xff] ^ aesTe3_[t3 & 0xff] ^ expandedKey[16];
+    s1 = aesTe0_[t1 >> 24] ^ aesTe1_[(t2 >> 16) & 0xff] ^ aesTe2_[(t3 >>  8) & 0xff] ^ aesTe3_[t0 & 0xff] ^ expandedKey[17];
+    s2 = aesTe0_[t2 >> 24] ^ aesTe1_[(t3 >> 16) & 0xff] ^ aesTe2_[(t0 >>  8) & 0xff] ^ aesTe3_[t1 & 0xff] ^ expandedKey[18];
+    s3 = aesTe0_[t3 >> 24] ^ aesTe1_[(t0 >> 16) & 0xff] ^ aesTe2_[(t1 >>  8) & 0xff] ^ aesTe3_[t2 & 0xff] ^ expandedKey[19];
+
+    t0 = aesTe0_[s0 >> 24] ^ aesTe1_[(s1 >> 16) & 0xff] ^ aesTe2_[(s2 >>  8) & 0xff] ^ aesTe3_[s3 & 0xff] ^ expandedKey[20];
+    t1 = aesTe0_[s1 >> 24] ^ aesTe1_[(s2 >> 16) & 0xff] ^ aesTe2_[(s3 >>  8) & 0xff] ^ aesTe3_[s0 & 0xff] ^ expandedKey[21];
+    t2 = aesTe0_[s2 >> 24] ^ aesTe1_[(s3 >> 16) & 0xff] ^ aesTe2_[(s0 >>  8) & 0xff] ^ aesTe3_[s1 & 0xff] ^ expandedKey[22];
+    t3 = aesTe0_[s3 >> 24] ^ aesTe1_[(s0 >> 16) & 0xff] ^ aesTe2_[(s1 >>  8) & 0xff] ^ aesTe3_[s2 & 0xff] ^ expandedKey[23];
+
+    s0 = aesTe0_[t0 >> 24] ^ aesTe1_[(t1 >> 16) & 0xff] ^ aesTe2_[(t2 >>  8) & 0xff] ^ aesTe3_[t3 & 0xff] ^ expandedKey[24];
+    s1 = aesTe0_[t1 >> 24] ^ aesTe1_[(t2 >> 16) & 0xff] ^ aesTe2_[(t3 >>  8) & 0xff] ^ aesTe3_[t0 & 0xff] ^ expandedKey[25];
+    s2 = aesTe0_[t2 >> 24] ^ aesTe1_[(t3 >> 16) & 0xff] ^ aesTe2_[(t0 >>  8) & 0xff] ^ aesTe3_[t1 & 0xff] ^ expandedKey[26];
+    s3 = aesTe0_[t3 >> 24] ^ aesTe1_[(t0 >> 16) & 0xff] ^ aesTe2_[(t1 >>  8) & 0xff] ^ aesTe3_[t2 & 0xff] ^ expandedKey[27];
+
+    t0 = aesTe0_[s0 >> 24] ^ aesTe1_[(s1 >> 16) & 0xff] ^ aesTe2_[(s2 >>  8) & 0xff] ^ aesTe3_[s3 & 0xff] ^ expandedKey[28];
+    t1 = aesTe0_[s1 >> 24] ^ aesTe1_[(s2 >> 16) & 0xff] ^ aesTe2_[(s3 >>  8) & 0xff] ^ aesTe3_[s0 & 0xff] ^ expandedKey[29];
+    t2 = aesTe0_[s2 >> 24] ^ aesTe1_[(s3 >> 16) & 0xff] ^ aesTe2_[(s0 >>  8) & 0xff] ^ aesTe3_[s1 & 0xff] ^ expandedKey[30];
+    t3 = aesTe0_[s3 >> 24] ^ aesTe1_[(s0 >> 16) & 0xff] ^ aesTe2_[(s1 >>  8) & 0xff] ^ aesTe3_[s2 & 0xff] ^ expandedKey[31];
+
+    s0 = aesTe0_[t0 >> 24] ^ aesTe1_[(t1 >> 16) & 0xff] ^ aesTe2_[(t2 >>  8) & 0xff] ^ aesTe3_[t3 & 0xff] ^ expandedKey[32];
+    s1 = aesTe0_[t1 >> 24] ^ aesTe1_[(t2 >> 16) & 0xff] ^ aesTe2_[(t3 >>  8) & 0xff] ^ aesTe3_[t0 & 0xff] ^ expandedKey[33];
+    s2 = aesTe0_[t2 >> 24] ^ aesTe1_[(t3 >> 16) & 0xff] ^ aesTe2_[(t0 >>  8) & 0xff] ^ aesTe3_[t1 & 0xff] ^ expandedKey[34];
+    s3 = aesTe0_[t3 >> 24] ^ aesTe1_[(t0 >> 16) & 0xff] ^ aesTe2_[(t1 >>  8) & 0xff] ^ aesTe3_[t2 & 0xff] ^ expandedKey[35];
+
+    t0 = aesTe0_[s0 >> 24] ^ aesTe1_[(s1 >> 16) & 0xff] ^ aesTe2_[(s2 >>  8) & 0xff] ^ aesTe3_[s3 & 0xff] ^ expandedKey[36];
+    t1 = aesTe0_[s1 >> 24] ^ aesTe1_[(s2 >> 16) & 0xff] ^ aesTe2_[(s3 >>  8) & 0xff] ^ aesTe3_[s0 & 0xff] ^ expandedKey[37];
+    t2 = aesTe0_[s2 >> 24] ^ aesTe1_[(s3 >> 16) & 0xff] ^ aesTe2_[(s0 >>  8) & 0xff] ^ aesTe3_[s1 & 0xff] ^ expandedKey[38];
+    t3 = aesTe0_[s3 >> 24] ^ aesTe1_[(s0 >> 16) & 0xff] ^ aesTe2_[(s1 >>  8) & 0xff] ^ aesTe3_[s2 & 0xff] ^ expandedKey[39];
+
+    if (keyLength_ > 128)
+    {
+        s0 = aesTe0_[t0 >> 24] ^ aesTe1_[(t1 >> 16) & 0xff] ^ aesTe2_[(t2 >>  8) & 0xff] ^ aesTe3_[t3 & 0xff] ^ expandedKey[40];
+        s1 = aesTe0_[t1 >> 24] ^ aesTe1_[(t2 >> 16) & 0xff] ^ aesTe2_[(t3 >>  8) & 0xff] ^ aesTe3_[t0 & 0xff] ^ expandedKey[41];
+        s2 = aesTe0_[t2 >> 24] ^ aesTe1_[(t3 >> 16) & 0xff] ^ aesTe2_[(t0 >>  8) & 0xff] ^ aesTe3_[t1 & 0xff] ^ expandedKey[42];
+        s3 = aesTe0_[t3 >> 24] ^ aesTe1_[(t0 >> 16) & 0xff] ^ aesTe2_[(t1 >>  8) & 0xff] ^ aesTe3_[t2 & 0xff] ^ expandedKey[43];
+
+        t0 = aesTe0_[s0 >> 24] ^ aesTe1_[(s1 >> 16) & 0xff] ^ aesTe2_[(s2 >>  8) & 0xff] ^ aesTe3_[s3 & 0xff] ^ expandedKey[44];
+        t1 = aesTe0_[s1 >> 24] ^ aesTe1_[(s2 >> 16) & 0xff] ^ aesTe2_[(s3 >>  8) & 0xff] ^ aesTe3_[s0 & 0xff] ^ expandedKey[45];
+        t2 = aesTe0_[s2 >> 24] ^ aesTe1_[(s3 >> 16) & 0xff] ^ aesTe2_[(s0 >>  8) & 0xff] ^ aesTe3_[s1 & 0xff] ^ expandedKey[46];
+        t3 = aesTe0_[s3 >> 24] ^ aesTe1_[(s0 >> 16) & 0xff] ^ aesTe2_[(s1 >>  8) & 0xff] ^ aesTe3_[s2 & 0xff] ^ expandedKey[47];
+
+        if (keyLength_ > 192)
+        {
+            s0 = aesTe0_[t0 >> 24] ^ aesTe1_[(t1 >> 16) & 0xff] ^ aesTe2_[(t2 >>  8) & 0xff] ^ aesTe3_[t3 & 0xff] ^ expandedKey[48];
+            s1 = aesTe0_[t1 >> 24] ^ aesTe1_[(t2 >> 16) & 0xff] ^ aesTe2_[(t3 >>  8) & 0xff] ^ aesTe3_[t0 & 0xff] ^ expandedKey[49];
+            s2 = aesTe0_[t2 >> 24] ^ aesTe1_[(t3 >> 16) & 0xff] ^ aesTe2_[(t0 >>  8) & 0xff] ^ aesTe3_[t1 & 0xff] ^ expandedKey[50];
+            s3 = aesTe0_[t3 >> 24] ^ aesTe1_[(t0 >> 16) & 0xff] ^ aesTe2_[(t1 >>  8) & 0xff] ^ aesTe3_[t2 & 0xff] ^ expandedKey[51];
+
+            t0 = aesTe0_[s0 >> 24] ^ aesTe1_[(s1 >> 16) & 0xff] ^ aesTe2_[(s2 >>  8) & 0xff] ^ aesTe3_[s3 & 0xff] ^ expandedKey[52];
+            t1 = aesTe0_[s1 >> 24] ^ aesTe1_[(s2 >> 16) & 0xff] ^ aesTe2_[(s3 >>  8) & 0xff] ^ aesTe3_[s0 & 0xff] ^ expandedKey[53];
+            t2 = aesTe0_[s2 >> 24] ^ aesTe1_[(s3 >> 16) & 0xff] ^ aesTe2_[(s0 >>  8) & 0xff] ^ aesTe3_[s1 & 0xff] ^ expandedKey[54];
+            t3 = aesTe0_[s3 >> 24] ^ aesTe1_[(s0 >> 16) & 0xff] ^ aesTe2_[(s1 >>  8) & 0xff] ^ aesTe3_[s2 & 0xff] ^ expandedKey[55];
+        }
+    }
+    expandedKey += ((keyLength_ >> 5) + 6) << 2;
+
+    s0 = (aesTe4_[(t0 >> 24)       ] & 0xff000000) ^
+         (aesTe4_[(t1 >> 16) & 0xff] & 0x00ff0000) ^
+         (aesTe4_[(t2 >>  8) & 0xff] & 0x0000ff00) ^
+         (aesTe4_[(t3      ) & 0xff] & 0x000000ff) ^
+         expandedKey[0];
+    PUTU32(out     , s0);
+    s1 = (aesTe4_[(t1 >> 24)       ] & 0xff000000) ^
+         (aesTe4_[(t2 >> 16) & 0xff] & 0x00ff0000) ^
+         (aesTe4_[(t3 >>  8) & 0xff] & 0x0000ff00) ^
+         (aesTe4_[(t0      ) & 0xff] & 0x000000ff) ^
+         expandedKey[1];
+    PUTU32(out +  4, s1);
+    s2 = (aesTe4_[(t2 >> 24)       ] & 0xff000000) ^
+         (aesTe4_[(t3 >> 16) & 0xff] & 0x00ff0000) ^
+         (aesTe4_[(t0 >>  8) & 0xff] & 0x0000ff00) ^
+         (aesTe4_[(t1      ) & 0xff] & 0x000000ff) ^
+         expandedKey[2];
+    PUTU32(out +  8, s2);
+    s3 = (aesTe4_[(t3 >> 24)       ] & 0xff000000) ^
+         (aesTe4_[(t0 >> 16) & 0xff] & 0x00ff0000) ^
+         (aesTe4_[(t1 >>  8) & 0xff] & 0x0000ff00) ^
+         (aesTe4_[(t2      ) & 0xff] & 0x000000ff) ^
+         expandedKey[3];
+    PUTU32(out + 12, s3);
+}
+
+// Decrypt a single block.
+void AES::aesDecryptBlock(const quint32* expandedKey, const quint8 in[16], quint8 out[16])
+{
+    quint32 s0, s1, s2, s3, t0, t1, t2, t3;
+
+    s0 = GETU32(in     ) ^ expandedKey[0];
+    s1 = GETU32(in +  4) ^ expandedKey[1];
+    s2 = GETU32(in +  8) ^ expandedKey[2];
+    s3 = GETU32(in + 12) ^ expandedKey[3];
+
+    t0 = aesTd0_[s0 >> 24] ^ aesTd1_[(s3 >> 16) & 0xff] ^ aesTd2_[(s2 >>  8) & 0xff] ^ aesTd3_[s1 & 0xff] ^ expandedKey[ 4];
+    t1 = aesTd0_[s1 >> 24] ^ aesTd1_[(s0 >> 16) & 0xff] ^ aesTd2_[(s3 >>  8) & 0xff] ^ aesTd3_[s2 & 0xff] ^ expandedKey[ 5];
+    t2 = aesTd0_[s2 >> 24] ^ aesTd1_[(s1 >> 16) & 0xff] ^ aesTd2_[(s0 >>  8) & 0xff] ^ aesTd3_[s3 & 0xff] ^ expandedKey[ 6];
+    t3 = aesTd0_[s3 >> 24] ^ aesTd1_[(s2 >> 16) & 0xff] ^ aesTd2_[(s1 >>  8) & 0xff] ^ aesTd3_[s0 & 0xff] ^ expandedKey[ 7];
+
+    s0 = aesTd0_[t0 >> 24] ^ aesTd1_[(t3 >> 16) & 0xff] ^ aesTd2_[(t2 >>  8) & 0xff] ^ aesTd3_[t1 & 0xff] ^ expandedKey[ 8];
+    s1 = aesTd0_[t1 >> 24] ^ aesTd1_[(t0 >> 16) & 0xff] ^ aesTd2_[(t3 >>  8) & 0xff] ^ aesTd3_[t2 & 0xff] ^ expandedKey[ 9];
+    s2 = aesTd0_[t2 >> 24] ^ aesTd1_[(t1 >> 16) & 0xff] ^ aesTd2_[(t0 >>  8) & 0xff] ^ aesTd3_[t3 & 0xff] ^ expandedKey[10];
+    s3 = aesTd0_[t3 >> 24] ^ aesTd1_[(t2 >> 16) & 0xff] ^ aesTd2_[(t1 >>  8) & 0xff] ^ aesTd3_[t0 & 0xff] ^ expandedKey[11];
+
+    t0 = aesTd0_[s0 >> 24] ^ aesTd1_[(s3 >> 16) & 0xff] ^ aesTd2_[(s2 >>  8) & 0xff] ^ aesTd3_[s1 & 0xff] ^ expandedKey[12];
+    t1 = aesTd0_[s1 >> 24] ^ aesTd1_[(s0 >> 16) & 0xff] ^ aesTd2_[(s3 >>  8) & 0xff] ^ aesTd3_[s2 & 0xff] ^ expandedKey[13];
+    t2 = aesTd0_[s2 >> 24] ^ aesTd1_[(s1 >> 16) & 0xff] ^ aesTd2_[(s0 >>  8) & 0xff] ^ aesTd3_[s3 & 0xff] ^ expandedKey[14];
+    t3 = aesTd0_[s3 >> 24] ^ aesTd1_[(s2 >> 16) & 0xff] ^ aesTd2_[(s1 >>  8) & 0xff] ^ aesTd3_[s0 & 0xff] ^ expandedKey[15];
+
+    s0 = aesTd0_[t0 >> 24] ^ aesTd1_[(t3 >> 16) & 0xff] ^ aesTd2_[(t2 >>  8) & 0xff] ^ aesTd3_[t1 & 0xff] ^ expandedKey[16];
+    s1 = aesTd0_[t1 >> 24] ^ aesTd1_[(t0 >> 16) & 0xff] ^ aesTd2_[(t3 >>  8) & 0xff] ^ aesTd3_[t2 & 0xff] ^ expandedKey[17];
+    s2 = aesTd0_[t2 >> 24] ^ aesTd1_[(t1 >> 16) & 0xff] ^ aesTd2_[(t0 >>  8) & 0xff] ^ aesTd3_[t3 & 0xff] ^ expandedKey[18];
+    s3 = aesTd0_[t3 >> 24] ^ aesTd1_[(t2 >> 16) & 0xff] ^ aesTd2_[(t1 >>  8) & 0xff] ^ aesTd3_[t0 & 0xff] ^ expandedKey[19];
+
+    t0 = aesTd0_[s0 >> 24] ^ aesTd1_[(s3 >> 16) & 0xff] ^ aesTd2_[(s2 >>  8) & 0xff] ^ aesTd3_[s1 & 0xff] ^ expandedKey[20];
+    t1 = aesTd0_[s1 >> 24] ^ aesTd1_[(s0 >> 16) & 0xff] ^ aesTd2_[(s3 >>  8) & 0xff] ^ aesTd3_[s2 & 0xff] ^ expandedKey[21];
+    t2 = aesTd0_[s2 >> 24] ^ aesTd1_[(s1 >> 16) & 0xff] ^ aesTd2_[(s0 >>  8) & 0xff] ^ aesTd3_[s3 & 0xff] ^ expandedKey[22];
+    t3 = aesTd0_[s3 >> 24] ^ aesTd1_[(s2 >> 16) & 0xff] ^ aesTd2_[(s1 >>  8) & 0xff] ^ aesTd3_[s0 & 0xff] ^ expandedKey[23];
+
+    s0 = aesTd0_[t0 >> 24] ^ aesTd1_[(t3 >> 16) & 0xff] ^ aesTd2_[(t2 >>  8) & 0xff] ^ aesTd3_[t1 & 0xff] ^ expandedKey[24];
+    s1 = aesTd0_[t1 >> 24] ^ aesTd1_[(t0 >> 16) & 0xff] ^ aesTd2_[(t3 >>  8) & 0xff] ^ aesTd3_[t2 & 0xff] ^ expandedKey[25];
+    s2 = aesTd0_[t2 >> 24] ^ aesTd1_[(t1 >> 16) & 0xff] ^ aesTd2_[(t0 >>  8) & 0xff] ^ aesTd3_[t3 & 0xff] ^ expandedKey[26];
+    s3 = aesTd0_[t3 >> 24] ^ aesTd1_[(t2 >> 16) & 0xff] ^ aesTd2_[(t1 >>  8) & 0xff] ^ aesTd3_[t0 & 0xff] ^ expandedKey[27];
+
+    t0 = aesTd0_[s0 >> 24] ^ aesTd1_[(s3 >> 16) & 0xff] ^ aesTd2_[(s2 >>  8) & 0xff] ^ aesTd3_[s1 & 0xff] ^ expandedKey[28];
+    t1 = aesTd0_[s1 >> 24] ^ aesTd1_[(s0 >> 16) & 0xff] ^ aesTd2_[(s3 >>  8) & 0xff] ^ aesTd3_[s2 & 0xff] ^ expandedKey[29];
+    t2 = aesTd0_[s2 >> 24] ^ aesTd1_[(s1 >> 16) & 0xff] ^ aesTd2_[(s0 >>  8) & 0xff] ^ aesTd3_[s3 & 0xff] ^ expandedKey[30];
+    t3 = aesTd0_[s3 >> 24] ^ aesTd1_[(s2 >> 16) & 0xff] ^ aesTd2_[(s1 >>  8) & 0xff] ^ aesTd3_[s0 & 0xff] ^ expandedKey[31];
+
+    s0 = aesTd0_[t0 >> 24] ^ aesTd1_[(t3 >> 16) & 0xff] ^ aesTd2_[(t2 >>  8) & 0xff] ^ aesTd3_[t1 & 0xff] ^ expandedKey[32];
+    s1 = aesTd0_[t1 >> 24] ^ aesTd1_[(t0 >> 16) & 0xff] ^ aesTd2_[(t3 >>  8) & 0xff] ^ aesTd3_[t2 & 0xff] ^ expandedKey[33];
+    s2 = aesTd0_[t2 >> 24] ^ aesTd1_[(t1 >> 16) & 0xff] ^ aesTd2_[(t0 >>  8) & 0xff] ^ aesTd3_[t3 & 0xff] ^ expandedKey[34];
+    s3 = aesTd0_[t3 >> 24] ^ aesTd1_[(t2 >> 16) & 0xff] ^ aesTd2_[(t1 >>  8) & 0xff] ^ aesTd3_[t0 & 0xff] ^ expandedKey[35];
+
+    t0 = aesTd0_[s0 >> 24] ^ aesTd1_[(s3 >> 16) & 0xff] ^ aesTd2_[(s2 >>  8) & 0xff] ^ aesTd3_[s1 & 0xff] ^ expandedKey[36];
+    t1 = aesTd0_[s1 >> 24] ^ aesTd1_[(s0 >> 16) & 0xff] ^ aesTd2_[(s3 >>  8) & 0xff] ^ aesTd3_[s2 & 0xff] ^ expandedKey[37];
+    t2 = aesTd0_[s2 >> 24] ^ aesTd1_[(s1 >> 16) & 0xff] ^ aesTd2_[(s0 >>  8) & 0xff] ^ aesTd3_[s3 & 0xff] ^ expandedKey[38];
+    t3 = aesTd0_[s3 >> 24] ^ aesTd1_[(s2 >> 16) & 0xff] ^ aesTd2_[(s1 >>  8) & 0xff] ^ aesTd3_[s0 & 0xff] ^ expandedKey[39];
+
+    if (keyLength_ > 128)
+    {
+
+        s0 = aesTd0_[t0 >> 24] ^ aesTd1_[(t3 >> 16) & 0xff] ^ aesTd2_[(t2 >>  8) & 0xff] ^ aesTd3_[t1 & 0xff] ^ expandedKey[40];
+        s1 = aesTd0_[t1 >> 24] ^ aesTd1_[(t0 >> 16) & 0xff] ^ aesTd2_[(t3 >>  8) & 0xff] ^ aesTd3_[t2 & 0xff] ^ expandedKey[41];
+        s2 = aesTd0_[t2 >> 24] ^ aesTd1_[(t1 >> 16) & 0xff] ^ aesTd2_[(t0 >>  8) & 0xff] ^ aesTd3_[t3 & 0xff] ^ expandedKey[42];
+        s3 = aesTd0_[t3 >> 24] ^ aesTd1_[(t2 >> 16) & 0xff] ^ aesTd2_[(t1 >>  8) & 0xff] ^ aesTd3_[t0 & 0xff] ^ expandedKey[43];
+
+        t0 = aesTd0_[s0 >> 24] ^ aesTd1_[(s3 >> 16) & 0xff] ^ aesTd2_[(s2 >>  8) & 0xff] ^ aesTd3_[s1 & 0xff] ^ expandedKey[44];
+        t1 = aesTd0_[s1 >> 24] ^ aesTd1_[(s0 >> 16) & 0xff] ^ aesTd2_[(s3 >>  8) & 0xff] ^ aesTd3_[s2 & 0xff] ^ expandedKey[45];
+        t2 = aesTd0_[s2 >> 24] ^ aesTd1_[(s1 >> 16) & 0xff] ^ aesTd2_[(s0 >>  8) & 0xff] ^ aesTd3_[s3 & 0xff] ^ expandedKey[46];
+        t3 = aesTd0_[s3 >> 24] ^ aesTd1_[(s2 >> 16) & 0xff] ^ aesTd2_[(s1 >>  8) & 0xff] ^ aesTd3_[s0 & 0xff] ^ expandedKey[47];
+
+        if (keyLength_ > 192)
+        {
+            s0 = aesTd0_[t0 >> 24] ^ aesTd1_[(t3 >> 16) & 0xff] ^ aesTd2_[(t2 >>  8) & 0xff] ^ aesTd3_[t1 & 0xff] ^ expandedKey[48];
+            s1 = aesTd0_[t1 >> 24] ^ aesTd1_[(t0 >> 16) & 0xff] ^ aesTd2_[(t3 >>  8) & 0xff] ^ aesTd3_[t2 & 0xff] ^ expandedKey[49];
+            s2 = aesTd0_[t2 >> 24] ^ aesTd1_[(t1 >> 16) & 0xff] ^ aesTd2_[(t0 >>  8) & 0xff] ^ aesTd3_[t3 & 0xff] ^ expandedKey[50];
+            s3 = aesTd0_[t3 >> 24] ^ aesTd1_[(t2 >> 16) & 0xff] ^ aesTd2_[(t1 >>  8) & 0xff] ^ aesTd3_[t0 & 0xff] ^ expandedKey[51];
+
+            t0 = aesTd0_[s0 >> 24] ^ aesTd1_[(s3 >> 16) & 0xff] ^ aesTd2_[(s2 >>  8) & 0xff] ^ aesTd3_[s1 & 0xff] ^ expandedKey[52];
+            t1 = aesTd0_[s1 >> 24] ^ aesTd1_[(s0 >> 16) & 0xff] ^ aesTd2_[(s3 >>  8) & 0xff] ^ aesTd3_[s2 & 0xff] ^ expandedKey[53];
+            t2 = aesTd0_[s2 >> 24] ^ aesTd1_[(s1 >> 16) & 0xff] ^ aesTd2_[(s0 >>  8) & 0xff] ^ aesTd3_[s3 & 0xff] ^ expandedKey[54];
+            t3 = aesTd0_[s3 >> 24] ^ aesTd1_[(s2 >> 16) & 0xff] ^ aesTd2_[(s1 >>  8) & 0xff] ^ aesTd3_[s0 & 0xff] ^ expandedKey[55];
+        }
+    }
+    expandedKey += ((keyLength_ >> 5) + 6) << 2;
+
+    s0 = (aesTd4_[(t0 >> 24)       ] & 0xff000000) ^
+         (aesTd4_[(t3 >> 16) & 0xff] & 0x00ff0000) ^
+         (aesTd4_[(t2 >>  8) & 0xff] & 0x0000ff00) ^
+         (aesTd4_[(t1      ) & 0xff] & 0x000000ff) ^
+         expandedKey[0];
+    PUTU32(out     , s0);
+    s1 = (aesTd4_[(t1 >> 24)       ] & 0xff000000) ^
+         (aesTd4_[(t0 >> 16) & 0xff] & 0x00ff0000) ^
+         (aesTd4_[(t3 >>  8) & 0xff] & 0x0000ff00) ^
+         (aesTd4_[(t2      ) & 0xff] & 0x000000ff) ^
+         expandedKey[1];
+    PUTU32(out +  4, s1);
+    s2 = (aesTd4_[(t2 >> 24)       ] & 0xff000000) ^
+         (aesTd4_[(t1 >> 16) & 0xff] & 0x00ff0000) ^
+         (aesTd4_[(t0 >>  8) & 0xff] & 0x0000ff00) ^
+         (aesTd4_[(t3      ) & 0xff] & 0x000000ff) ^
+         expandedKey[2];
+    PUTU32(out +  8, s2);
+    s3 = (aesTd4_[(t3 >> 24)       ] & 0xff000000) ^
+         (aesTd4_[(t2 >> 16) & 0xff] & 0x00ff0000) ^
+         (aesTd4_[(t1 >>  8) & 0xff] & 0x0000ff00) ^
+         (aesTd4_[(t0      ) & 0xff] & 0x000000ff) ^
+         expandedKey[3];
+    PUTU32(out + 12, s3);
 }
 
 // Encrypt a block in the XTS mode.
-void AES::xtsEncryptBlock(const unsigned char tweak[16], const unsigned char in[16], unsigned char out[16])
+void AES::xtsEncryptBlock(const quint8 tweak[16], const quint8 in[16], quint8 out[16])
 {
-    unsigned char PP[16];
-    unsigned char CC[16];
+    quint8 PP[16];
+    quint8 CC[16];
 
-    for (int i = 0; i < 16; i++)
+    for (qint32 i = 0; i < 16; i++)
     {
         PP[i] = in[i] ^ tweak[i];
     }
 
     aesEncryptBlock(expandedKey1_, PP, CC);
 
-    for (int i = 0; i < 16; i++)
+    for (qint32 i = 0; i < 16; i++)
     {
         out[i] = CC[i] ^ tweak[i];
     }
 }
 
 // Decrypt a block in the XTS mode.
-void AES::xtsDecryptBlock(const unsigned char tweak[16], const unsigned char in[16], unsigned char out[16])
+void AES::xtsDecryptBlock(const quint8 tweak[16], const quint8 in[16], quint8 out[16])
 {
-    unsigned char CC[16];
-    unsigned char PP[16];
+    quint8 CC[16];
+    quint8 PP[16];
 
-    for (int i = 0; i < 16; i++)
+    for (qint32 i = 0; i < 16; i++)
     {
         CC[i] = in[i] ^ tweak[i];
     }
 
-    aesDecryptBlock(expandedKey1_, CC, PP);
+    aesDecryptBlock(expandedKey2_, CC, PP);
 
-    for (int i = 0; i < 16; i++)
+    for (qint32 i = 0; i < 16; i++)
     {
         out[i] = PP[i] ^ tweak[i];
     }
 }
 
 // Compute the tweak for the encryption of the next block.
-void AES::xtsComputeTweak(unsigned char tweak[16])
+void AES::xtsComputeTweak(quint8 tweak[16])
 {
-    int carry = (tweak[15] & 0x80) >> 7;
-    for (int i = 15; i > 0; i--)
+    qint32 carry = (tweak[15] & 0x80) >> 7;
+    for (qint32 i = 15; i > 0; i--)
     {
         tweak[i] <<= 1;
         tweak[i] ^= ((tweak[i - 1] & 0x80) >> 7);
@@ -941,237 +1319,6 @@ void AES::xtsComputeTweak(unsigned char tweak[16])
     {
         tweak[0] ^= 0x87;
     }
-}
-
-// Expand the key into encryption key schedule.
-void AES::aesExpandEncryptionKey(const unsigned char key[16], unsigned int expandedKey[44])
-{
-    int i = 0;
-    unsigned int temp;
-
-    expandedKey[0] = GETU32(key     );
-    expandedKey[1] = GETU32(key +  4);
-    expandedKey[2] = GETU32(key +  8);
-    expandedKey[3] = GETU32(key + 12);
-
-    for (;;)
-    {
-        temp  = expandedKey[3];
-        expandedKey[4] = expandedKey[0] ^
-                (aesTe4[(temp >> 16) & 0xff] & 0xff000000) ^
-                (aesTe4[(temp >>  8) & 0xff] & 0x00ff0000) ^
-                (aesTe4[(temp      ) & 0xff] & 0x0000ff00) ^
-                (aesTe4[(temp >> 24)       ] & 0x000000ff) ^
-                aesRCon[i];
-        expandedKey[5] = expandedKey[1] ^ expandedKey[4];
-        expandedKey[6] = expandedKey[2] ^ expandedKey[5];
-        expandedKey[7] = expandedKey[3] ^ expandedKey[6];
-        if (++i == 10)
-        {
-            return;
-        }
-        expandedKey += 4;
-    }
-}
-
-// Expand the key into decryption key schedule.
-void AES::aesExpandDecryptionKey(const unsigned char key[16], int unsigned expandedKey[44])
-{
-    int i, j;
-    unsigned int temp;
-
-    aesExpandEncryptionKey(key, expandedKey);
-
-    for (i = 0, j = 40; i < j; i += 4, j -= 4)
-    {
-        temp = expandedKey[i    ]; expandedKey[i    ] = expandedKey[j    ]; expandedKey[j    ] = temp;
-        temp = expandedKey[i + 1]; expandedKey[i + 1] = expandedKey[j + 1]; expandedKey[j + 1] = temp;
-        temp = expandedKey[i + 2]; expandedKey[i + 2] = expandedKey[j + 2]; expandedKey[j + 2] = temp;
-        temp = expandedKey[i + 3]; expandedKey[i + 3] = expandedKey[j + 3]; expandedKey[j + 3] = temp;
-    }
-
-    for (i = 1; i < 10; i++)
-    {
-        expandedKey += 4;
-        expandedKey[0] = aesTd0[aesTe4[(expandedKey[0] >> 24)       ] & 0xff] ^
-                         aesTd1[aesTe4[(expandedKey[0] >> 16) & 0xff] & 0xff] ^
-                         aesTd2[aesTe4[(expandedKey[0] >>  8) & 0xff] & 0xff] ^
-                         aesTd3[aesTe4[(expandedKey[0]      ) & 0xff] & 0xff];
-        expandedKey[1] = aesTd0[aesTe4[(expandedKey[1] >> 24)       ] & 0xff] ^
-                         aesTd1[aesTe4[(expandedKey[1] >> 16) & 0xff] & 0xff] ^
-                         aesTd2[aesTe4[(expandedKey[1] >>  8) & 0xff] & 0xff] ^
-                         aesTd3[aesTe4[(expandedKey[1]      ) & 0xff] & 0xff];
-        expandedKey[2] = aesTd0[aesTe4[(expandedKey[2] >> 24)       ] & 0xff] ^
-                         aesTd1[aesTe4[(expandedKey[2] >> 16) & 0xff] & 0xff] ^
-                         aesTd2[aesTe4[(expandedKey[2] >>  8) & 0xff] & 0xff] ^
-                         aesTd3[aesTe4[(expandedKey[2]      ) & 0xff] & 0xff];
-        expandedKey[3] = aesTd0[aesTe4[(expandedKey[3] >> 24)       ] & 0xff] ^
-                         aesTd1[aesTe4[(expandedKey[3] >> 16) & 0xff] & 0xff] ^
-                         aesTd2[aesTe4[(expandedKey[3] >>  8) & 0xff] & 0xff] ^
-                         aesTd3[aesTe4[(expandedKey[3]      ) & 0xff] & 0xff];
-    }
-}
-
-// Encrypt a single block using AES-128.
-void AES::aesEncryptBlock(const unsigned int expandedKey[44], const unsigned char in[16], unsigned char out[16])
-{
-    unsigned int s0, s1, s2, s3, t0, t1, t2, t3;
-
-    s0 = GETU32(in     ) ^ expandedKey[0];
-    s1 = GETU32(in +  4) ^ expandedKey[1];
-    s2 = GETU32(in +  8) ^ expandedKey[2];
-    s3 = GETU32(in + 12) ^ expandedKey[3];
-
-    t0 = aesTe0[s0 >> 24] ^ aesTe1[(s1 >> 16) & 0xff] ^ aesTe2[(s2 >>  8) & 0xff] ^ aesTe3[s3 & 0xff] ^ expandedKey[ 4];
-    t1 = aesTe0[s1 >> 24] ^ aesTe1[(s2 >> 16) & 0xff] ^ aesTe2[(s3 >>  8) & 0xff] ^ aesTe3[s0 & 0xff] ^ expandedKey[ 5];
-    t2 = aesTe0[s2 >> 24] ^ aesTe1[(s3 >> 16) & 0xff] ^ aesTe2[(s0 >>  8) & 0xff] ^ aesTe3[s1 & 0xff] ^ expandedKey[ 6];
-    t3 = aesTe0[s3 >> 24] ^ aesTe1[(s0 >> 16) & 0xff] ^ aesTe2[(s1 >>  8) & 0xff] ^ aesTe3[s2 & 0xff] ^ expandedKey[ 7];
-
-    s0 = aesTe0[t0 >> 24] ^ aesTe1[(t1 >> 16) & 0xff] ^ aesTe2[(t2 >>  8) & 0xff] ^ aesTe3[t3 & 0xff] ^ expandedKey[ 8];
-    s1 = aesTe0[t1 >> 24] ^ aesTe1[(t2 >> 16) & 0xff] ^ aesTe2[(t3 >>  8) & 0xff] ^ aesTe3[t0 & 0xff] ^ expandedKey[ 9];
-    s2 = aesTe0[t2 >> 24] ^ aesTe1[(t3 >> 16) & 0xff] ^ aesTe2[(t0 >>  8) & 0xff] ^ aesTe3[t1 & 0xff] ^ expandedKey[10];
-    s3 = aesTe0[t3 >> 24] ^ aesTe1[(t0 >> 16) & 0xff] ^ aesTe2[(t1 >>  8) & 0xff] ^ aesTe3[t2 & 0xff] ^ expandedKey[11];
-
-    t0 = aesTe0[s0 >> 24] ^ aesTe1[(s1 >> 16) & 0xff] ^ aesTe2[(s2 >>  8) & 0xff] ^ aesTe3[s3 & 0xff] ^ expandedKey[12];
-    t1 = aesTe0[s1 >> 24] ^ aesTe1[(s2 >> 16) & 0xff] ^ aesTe2[(s3 >>  8) & 0xff] ^ aesTe3[s0 & 0xff] ^ expandedKey[13];
-    t2 = aesTe0[s2 >> 24] ^ aesTe1[(s3 >> 16) & 0xff] ^ aesTe2[(s0 >>  8) & 0xff] ^ aesTe3[s1 & 0xff] ^ expandedKey[14];
-    t3 = aesTe0[s3 >> 24] ^ aesTe1[(s0 >> 16) & 0xff] ^ aesTe2[(s1 >>  8) & 0xff] ^ aesTe3[s2 & 0xff] ^ expandedKey[15];
-
-    s0 = aesTe0[t0 >> 24] ^ aesTe1[(t1 >> 16) & 0xff] ^ aesTe2[(t2 >>  8) & 0xff] ^ aesTe3[t3 & 0xff] ^ expandedKey[16];
-    s1 = aesTe0[t1 >> 24] ^ aesTe1[(t2 >> 16) & 0xff] ^ aesTe2[(t3 >>  8) & 0xff] ^ aesTe3[t0 & 0xff] ^ expandedKey[17];
-    s2 = aesTe0[t2 >> 24] ^ aesTe1[(t3 >> 16) & 0xff] ^ aesTe2[(t0 >>  8) & 0xff] ^ aesTe3[t1 & 0xff] ^ expandedKey[18];
-    s3 = aesTe0[t3 >> 24] ^ aesTe1[(t0 >> 16) & 0xff] ^ aesTe2[(t1 >>  8) & 0xff] ^ aesTe3[t2 & 0xff] ^ expandedKey[19];
-
-    t0 = aesTe0[s0 >> 24] ^ aesTe1[(s1 >> 16) & 0xff] ^ aesTe2[(s2 >>  8) & 0xff] ^ aesTe3[s3 & 0xff] ^ expandedKey[20];
-    t1 = aesTe0[s1 >> 24] ^ aesTe1[(s2 >> 16) & 0xff] ^ aesTe2[(s3 >>  8) & 0xff] ^ aesTe3[s0 & 0xff] ^ expandedKey[21];
-    t2 = aesTe0[s2 >> 24] ^ aesTe1[(s3 >> 16) & 0xff] ^ aesTe2[(s0 >>  8) & 0xff] ^ aesTe3[s1 & 0xff] ^ expandedKey[22];
-    t3 = aesTe0[s3 >> 24] ^ aesTe1[(s0 >> 16) & 0xff] ^ aesTe2[(s1 >>  8) & 0xff] ^ aesTe3[s2 & 0xff] ^ expandedKey[23];
-
-    s0 = aesTe0[t0 >> 24] ^ aesTe1[(t1 >> 16) & 0xff] ^ aesTe2[(t2 >>  8) & 0xff] ^ aesTe3[t3 & 0xff] ^ expandedKey[24];
-    s1 = aesTe0[t1 >> 24] ^ aesTe1[(t2 >> 16) & 0xff] ^ aesTe2[(t3 >>  8) & 0xff] ^ aesTe3[t0 & 0xff] ^ expandedKey[25];
-    s2 = aesTe0[t2 >> 24] ^ aesTe1[(t3 >> 16) & 0xff] ^ aesTe2[(t0 >>  8) & 0xff] ^ aesTe3[t1 & 0xff] ^ expandedKey[26];
-    s3 = aesTe0[t3 >> 24] ^ aesTe1[(t0 >> 16) & 0xff] ^ aesTe2[(t1 >>  8) & 0xff] ^ aesTe3[t2 & 0xff] ^ expandedKey[27];
-
-    t0 = aesTe0[s0 >> 24] ^ aesTe1[(s1 >> 16) & 0xff] ^ aesTe2[(s2 >>  8) & 0xff] ^ aesTe3[s3 & 0xff] ^ expandedKey[28];
-    t1 = aesTe0[s1 >> 24] ^ aesTe1[(s2 >> 16) & 0xff] ^ aesTe2[(s3 >>  8) & 0xff] ^ aesTe3[s0 & 0xff] ^ expandedKey[29];
-    t2 = aesTe0[s2 >> 24] ^ aesTe1[(s3 >> 16) & 0xff] ^ aesTe2[(s0 >>  8) & 0xff] ^ aesTe3[s1 & 0xff] ^ expandedKey[30];
-    t3 = aesTe0[s3 >> 24] ^ aesTe1[(s0 >> 16) & 0xff] ^ aesTe2[(s1 >>  8) & 0xff] ^ aesTe3[s2 & 0xff] ^ expandedKey[31];
-
-    s0 = aesTe0[t0 >> 24] ^ aesTe1[(t1 >> 16) & 0xff] ^ aesTe2[(t2 >>  8) & 0xff] ^ aesTe3[t3 & 0xff] ^ expandedKey[32];
-    s1 = aesTe0[t1 >> 24] ^ aesTe1[(t2 >> 16) & 0xff] ^ aesTe2[(t3 >>  8) & 0xff] ^ aesTe3[t0 & 0xff] ^ expandedKey[33];
-    s2 = aesTe0[t2 >> 24] ^ aesTe1[(t3 >> 16) & 0xff] ^ aesTe2[(t0 >>  8) & 0xff] ^ aesTe3[t1 & 0xff] ^ expandedKey[34];
-    s3 = aesTe0[t3 >> 24] ^ aesTe1[(t0 >> 16) & 0xff] ^ aesTe2[(t1 >>  8) & 0xff] ^ aesTe3[t2 & 0xff] ^ expandedKey[35];
-
-    t0 = aesTe0[s0 >> 24] ^ aesTe1[(s1 >> 16) & 0xff] ^ aesTe2[(s2 >>  8) & 0xff] ^ aesTe3[s3 & 0xff] ^ expandedKey[36];
-    t1 = aesTe0[s1 >> 24] ^ aesTe1[(s2 >> 16) & 0xff] ^ aesTe2[(s3 >>  8) & 0xff] ^ aesTe3[s0 & 0xff] ^ expandedKey[37];
-    t2 = aesTe0[s2 >> 24] ^ aesTe1[(s3 >> 16) & 0xff] ^ aesTe2[(s0 >>  8) & 0xff] ^ aesTe3[s1 & 0xff] ^ expandedKey[38];
-    t3 = aesTe0[s3 >> 24] ^ aesTe1[(s0 >> 16) & 0xff] ^ aesTe2[(s1 >>  8) & 0xff] ^ aesTe3[s2 & 0xff] ^ expandedKey[39];
-
-    s0 = (aesTe4[(t0 >> 24)       ] & 0xff000000) ^
-         (aesTe4[(t1 >> 16) & 0xff] & 0x00ff0000) ^
-         (aesTe4[(t2 >>  8) & 0xff] & 0x0000ff00) ^
-         (aesTe4[(t3      ) & 0xff] & 0x000000ff) ^
-         expandedKey[40];
-    PUTU32(out     , s0);
-    s1 = (aesTe4[(t1 >> 24)       ] & 0xff000000) ^
-         (aesTe4[(t2 >> 16) & 0xff] & 0x00ff0000) ^
-         (aesTe4[(t3 >>  8) & 0xff] & 0x0000ff00) ^
-         (aesTe4[(t0      ) & 0xff] & 0x000000ff) ^
-         expandedKey[41];
-    PUTU32(out +  4, s1);
-    s2 = (aesTe4[(t2 >> 24)       ] & 0xff000000) ^
-         (aesTe4[(t3 >> 16) & 0xff] & 0x00ff0000) ^
-         (aesTe4[(t0 >>  8) & 0xff] & 0x0000ff00) ^
-         (aesTe4[(t1      ) & 0xff] & 0x000000ff) ^
-         expandedKey[42];
-    PUTU32(out +  8, s2);
-    s3 = (aesTe4[(t3 >> 24)       ] & 0xff000000) ^
-         (aesTe4[(t0 >> 16) & 0xff] & 0x00ff0000) ^
-         (aesTe4[(t1 >>  8) & 0xff] & 0x0000ff00) ^
-         (aesTe4[(t2      ) & 0xff] & 0x000000ff) ^
-         expandedKey[43];
-    PUTU32(out + 12, s3);
-}
-
-// Decrypt a single block using AES-128.
-void AES::aesDecryptBlock(const unsigned int expandedKey[44], const unsigned char in[16], unsigned char out[16])
-{
-    unsigned int s0, s1, s2, s3, t0, t1, t2, t3;
-
-    s0 = GETU32(in     ) ^ expandedKey[0];
-    s1 = GETU32(in +  4) ^ expandedKey[1];
-    s2 = GETU32(in +  8) ^ expandedKey[2];
-    s3 = GETU32(in + 12) ^ expandedKey[3];
-
-    t0 = aesTd0[s0 >> 24] ^ aesTd1[(s3 >> 16) & 0xff] ^ aesTd2[(s2 >>  8) & 0xff] ^ aesTd3[s1 & 0xff] ^ expandedKey[ 4];
-    t1 = aesTd0[s1 >> 24] ^ aesTd1[(s0 >> 16) & 0xff] ^ aesTd2[(s3 >>  8) & 0xff] ^ aesTd3[s2 & 0xff] ^ expandedKey[ 5];
-    t2 = aesTd0[s2 >> 24] ^ aesTd1[(s1 >> 16) & 0xff] ^ aesTd2[(s0 >>  8) & 0xff] ^ aesTd3[s3 & 0xff] ^ expandedKey[ 6];
-    t3 = aesTd0[s3 >> 24] ^ aesTd1[(s2 >> 16) & 0xff] ^ aesTd2[(s1 >>  8) & 0xff] ^ aesTd3[s0 & 0xff] ^ expandedKey[ 7];
-
-    s0 = aesTd0[t0 >> 24] ^ aesTd1[(t3 >> 16) & 0xff] ^ aesTd2[(t2 >>  8) & 0xff] ^ aesTd3[t1 & 0xff] ^ expandedKey[ 8];
-    s1 = aesTd0[t1 >> 24] ^ aesTd1[(t0 >> 16) & 0xff] ^ aesTd2[(t3 >>  8) & 0xff] ^ aesTd3[t2 & 0xff] ^ expandedKey[ 9];
-    s2 = aesTd0[t2 >> 24] ^ aesTd1[(t1 >> 16) & 0xff] ^ aesTd2[(t0 >>  8) & 0xff] ^ aesTd3[t3 & 0xff] ^ expandedKey[10];
-    s3 = aesTd0[t3 >> 24] ^ aesTd1[(t2 >> 16) & 0xff] ^ aesTd2[(t1 >>  8) & 0xff] ^ aesTd3[t0 & 0xff] ^ expandedKey[11];
-
-    t0 = aesTd0[s0 >> 24] ^ aesTd1[(s3 >> 16) & 0xff] ^ aesTd2[(s2 >>  8) & 0xff] ^ aesTd3[s1 & 0xff] ^ expandedKey[12];
-    t1 = aesTd0[s1 >> 24] ^ aesTd1[(s0 >> 16) & 0xff] ^ aesTd2[(s3 >>  8) & 0xff] ^ aesTd3[s2 & 0xff] ^ expandedKey[13];
-    t2 = aesTd0[s2 >> 24] ^ aesTd1[(s1 >> 16) & 0xff] ^ aesTd2[(s0 >>  8) & 0xff] ^ aesTd3[s3 & 0xff] ^ expandedKey[14];
-    t3 = aesTd0[s3 >> 24] ^ aesTd1[(s2 >> 16) & 0xff] ^ aesTd2[(s1 >>  8) & 0xff] ^ aesTd3[s0 & 0xff] ^ expandedKey[15];
-
-    s0 = aesTd0[t0 >> 24] ^ aesTd1[(t3 >> 16) & 0xff] ^ aesTd2[(t2 >>  8) & 0xff] ^ aesTd3[t1 & 0xff] ^ expandedKey[16];
-    s1 = aesTd0[t1 >> 24] ^ aesTd1[(t0 >> 16) & 0xff] ^ aesTd2[(t3 >>  8) & 0xff] ^ aesTd3[t2 & 0xff] ^ expandedKey[17];
-    s2 = aesTd0[t2 >> 24] ^ aesTd1[(t1 >> 16) & 0xff] ^ aesTd2[(t0 >>  8) & 0xff] ^ aesTd3[t3 & 0xff] ^ expandedKey[18];
-    s3 = aesTd0[t3 >> 24] ^ aesTd1[(t2 >> 16) & 0xff] ^ aesTd2[(t1 >>  8) & 0xff] ^ aesTd3[t0 & 0xff] ^ expandedKey[19];
-
-    t0 = aesTd0[s0 >> 24] ^ aesTd1[(s3 >> 16) & 0xff] ^ aesTd2[(s2 >>  8) & 0xff] ^ aesTd3[s1 & 0xff] ^ expandedKey[20];
-    t1 = aesTd0[s1 >> 24] ^ aesTd1[(s0 >> 16) & 0xff] ^ aesTd2[(s3 >>  8) & 0xff] ^ aesTd3[s2 & 0xff] ^ expandedKey[21];
-    t2 = aesTd0[s2 >> 24] ^ aesTd1[(s1 >> 16) & 0xff] ^ aesTd2[(s0 >>  8) & 0xff] ^ aesTd3[s3 & 0xff] ^ expandedKey[22];
-    t3 = aesTd0[s3 >> 24] ^ aesTd1[(s2 >> 16) & 0xff] ^ aesTd2[(s1 >>  8) & 0xff] ^ aesTd3[s0 & 0xff] ^ expandedKey[23];
-
-    s0 = aesTd0[t0 >> 24] ^ aesTd1[(t3 >> 16) & 0xff] ^ aesTd2[(t2 >>  8) & 0xff] ^ aesTd3[t1 & 0xff] ^ expandedKey[24];
-    s1 = aesTd0[t1 >> 24] ^ aesTd1[(t0 >> 16) & 0xff] ^ aesTd2[(t3 >>  8) & 0xff] ^ aesTd3[t2 & 0xff] ^ expandedKey[25];
-    s2 = aesTd0[t2 >> 24] ^ aesTd1[(t1 >> 16) & 0xff] ^ aesTd2[(t0 >>  8) & 0xff] ^ aesTd3[t3 & 0xff] ^ expandedKey[26];
-    s3 = aesTd0[t3 >> 24] ^ aesTd1[(t2 >> 16) & 0xff] ^ aesTd2[(t1 >>  8) & 0xff] ^ aesTd3[t0 & 0xff] ^ expandedKey[27];
-
-    t0 = aesTd0[s0 >> 24] ^ aesTd1[(s3 >> 16) & 0xff] ^ aesTd2[(s2 >>  8) & 0xff] ^ aesTd3[s1 & 0xff] ^ expandedKey[28];
-    t1 = aesTd0[s1 >> 24] ^ aesTd1[(s0 >> 16) & 0xff] ^ aesTd2[(s3 >>  8) & 0xff] ^ aesTd3[s2 & 0xff] ^ expandedKey[29];
-    t2 = aesTd0[s2 >> 24] ^ aesTd1[(s1 >> 16) & 0xff] ^ aesTd2[(s0 >>  8) & 0xff] ^ aesTd3[s3 & 0xff] ^ expandedKey[30];
-    t3 = aesTd0[s3 >> 24] ^ aesTd1[(s2 >> 16) & 0xff] ^ aesTd2[(s1 >>  8) & 0xff] ^ aesTd3[s0 & 0xff] ^ expandedKey[31];
-
-    s0 = aesTd0[t0 >> 24] ^ aesTd1[(t3 >> 16) & 0xff] ^ aesTd2[(t2 >>  8) & 0xff] ^ aesTd3[t1 & 0xff] ^ expandedKey[32];
-    s1 = aesTd0[t1 >> 24] ^ aesTd1[(t0 >> 16) & 0xff] ^ aesTd2[(t3 >>  8) & 0xff] ^ aesTd3[t2 & 0xff] ^ expandedKey[33];
-    s2 = aesTd0[t2 >> 24] ^ aesTd1[(t1 >> 16) & 0xff] ^ aesTd2[(t0 >>  8) & 0xff] ^ aesTd3[t3 & 0xff] ^ expandedKey[34];
-    s3 = aesTd0[t3 >> 24] ^ aesTd1[(t2 >> 16) & 0xff] ^ aesTd2[(t1 >>  8) & 0xff] ^ aesTd3[t0 & 0xff] ^ expandedKey[35];
-
-    t0 = aesTd0[s0 >> 24] ^ aesTd1[(s3 >> 16) & 0xff] ^ aesTd2[(s2 >>  8) & 0xff] ^ aesTd3[s1 & 0xff] ^ expandedKey[36];
-    t1 = aesTd0[s1 >> 24] ^ aesTd1[(s0 >> 16) & 0xff] ^ aesTd2[(s3 >>  8) & 0xff] ^ aesTd3[s2 & 0xff] ^ expandedKey[37];
-    t2 = aesTd0[s2 >> 24] ^ aesTd1[(s1 >> 16) & 0xff] ^ aesTd2[(s0 >>  8) & 0xff] ^ aesTd3[s3 & 0xff] ^ expandedKey[38];
-    t3 = aesTd0[s3 >> 24] ^ aesTd1[(s2 >> 16) & 0xff] ^ aesTd2[(s1 >>  8) & 0xff] ^ aesTd3[s0 & 0xff] ^ expandedKey[39];
-
-    s0 = (aesTd4[(t0 >> 24)       ] & 0xff000000) ^
-         (aesTd4[(t3 >> 16) & 0xff] & 0x00ff0000) ^
-         (aesTd4[(t2 >>  8) & 0xff] & 0x0000ff00) ^
-         (aesTd4[(t1      ) & 0xff] & 0x000000ff) ^
-         expandedKey[40];
-    PUTU32(out     , s0);
-    s1 = (aesTd4[(t1 >> 24)       ] & 0xff000000) ^
-         (aesTd4[(t0 >> 16) & 0xff] & 0x00ff0000) ^
-         (aesTd4[(t3 >>  8) & 0xff] & 0x0000ff00) ^
-         (aesTd4[(t2      ) & 0xff] & 0x000000ff) ^
-         expandedKey[41];
-    PUTU32(out +  4, s1);
-    s2 = (aesTd4[(t2 >> 24)       ] & 0xff000000) ^
-         (aesTd4[(t1 >> 16) & 0xff] & 0x00ff0000) ^
-         (aesTd4[(t0 >>  8) & 0xff] & 0x0000ff00) ^
-         (aesTd4[(t3      ) & 0xff] & 0x000000ff) ^
-         expandedKey[42];
-    PUTU32(out +  8, s2);
-    s3 = (aesTd4[(t3 >> 24)       ] & 0xff000000) ^
-         (aesTd4[(t2 >> 16) & 0xff] & 0x00ff0000) ^
-         (aesTd4[(t1 >>  8) & 0xff] & 0x0000ff00) ^
-         (aesTd4[(t0      ) & 0xff] & 0x000000ff) ^
-         expandedKey[43];
-    PUTU32(out + 12, s3);
 }
 
 #undef SWAP
