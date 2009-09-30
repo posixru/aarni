@@ -1,6 +1,9 @@
 #summary The change log of each release.
 #labels Featured
 
+  * 0.2.0.1
+    # Update the file traversing code.
+    # Fix the bug of creating directories when decrypting files.
   * 0.2.0
     # Support folder encryption and compression.
   * 0.1.4
