@@ -15,12 +15,16 @@
 
 #include <QDateTime>
 #include <QDir>
+#include <QDirIterator>
 #include <QFile>
 #include <QFileInfo>
 #include <QtEndian>
 
 #include "const.h"
 #include "encryptor.h"
+
+#include <iostream>
+using namespace std;
 
 namespace Aarni
 {
@@ -119,7 +123,15 @@ void Encryptor::encrypt()
 
     // encrypt files
     aes_.reset();
-    traverse(param_.source_);
+    directory_.clear();
+    QDirIterator di(param_.source_, QDirIterator::Subdirectories);
+    while(di.hasNext()) {
+        QString tmp = di.next();
+        if (di.fileInfo().isFile() && di.fileName() != "." && di.fileName() != "..")
+        {
+            encryptFile(tmp);
+        }
+    }
 
     // write the header
     FileHeader header;
@@ -209,9 +221,9 @@ void Encryptor::decrypt()
     }
 
     // decrypt files
-    QDir().mkpath(param_.destination_);
     aes_.reset();
     int size = directory_.size();
+    cout << size << endl;
     for (int i = 0; i < size; i++)
     {
         // decrypt and decompress
@@ -227,6 +239,7 @@ void Encryptor::decrypt()
         sha_.update(buf1);
 
         // write the file
+        QDir().mkpath(QFileInfo(directory_[i].name_).absolutePath());
         QFile dst(directory_[i].name_);
         dst.open(QIODevice::WriteOnly);
         dst.write(buf1);
@@ -245,32 +258,6 @@ void Encryptor::decrypt()
     }
 
     emit encryptionCompleted(ERROR_SUCCESS);
-}
-
-// Traverse the directory for encryption.
-void Encryptor::traverse(const QString& path)
-{
-    QDir dir(path);
-    if (!dir.exists())
-    {
-        encryptFile(path);
-        return;
-    }
-
-    QStringList entryList = dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot);
-    QStringList::const_iterator iter;
-    for (iter = entryList.constBegin(); iter != entryList.constEnd(); ++iter)
-    {
-        QString entry = path + QDir::separator() + (*iter);
-        if (QDir(entry).exists())
-        {
-            traverse(entry);
-        }
-        else
-        {
-            encryptFile(entry);
-        }
-    }
 }
 
 // Encrypt a single file.
