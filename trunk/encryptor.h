@@ -100,9 +100,6 @@ private:
     void encrypt();
     void decrypt();
 
-    // Traverse the directory for encryption.
-    void traverse(const QString& path);
-
     // Encrypt a single file.
     void encryptFile(const QString& file);
 
