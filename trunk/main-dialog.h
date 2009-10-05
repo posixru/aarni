@@ -13,43 +13,51 @@
  * Lesser General Public License for more details.
  */
 
-#ifndef __AARNI_MAINDIALOG_H_
-#define __AARNI_MAINDIALOG_H_
+#ifndef __AARNI_MAIN_DIALOG_H__
+#define __AARNI_MAIN_DIALOG_H__
 
-#include <QObject>
+#include <QDialog>
+#include <QLabel>
+#include <QPushButton>
 
+#include "about-dialog.h"
+#include "decryption-wizard.h"
+#include "encryption-wizard.h"
 #include "encryptor.h"
-#include "main-dialog-ui.h"
 
 namespace Aarni
 {
 
-class MainDialog : public QObject
+class MainDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    MainDialog(QObject* parent = NULL);
-    ~MainDialog();
+    MainDialog(QWidget* parent = NULL);
+
+    void retranslateUI();
 
 private slots:
-    void viewHomePage();
-    void browseEncryptionSourceFile();
-    void browseEncryptionSourceDir();
-    void browseEncryptionDestination();
-    void showEncryptionPassword(int state);
-    void browseDecryptionSource();
-    void browseDecryptionDestination();
-    void showDecryptionPassword(int state);
-    void encrypt();
-    void decrypt();
+    void openHomePage();
     void completeEncryption(quint32 result);
 
 private:
-    MainDialogUI* ui_;
+    void setupUI();
+
+    QLabel* logoLabel_;
+    QLabel* titleLabel_;
+    QPushButton* encryptButton_;
+    QPushButton* decryptButton_;
+    QPushButton* browseButton_;
+    QPushButton* aboutButton_;
+
+    AboutDialog* aboutDialog_;
+    DecWizard* decWizard_;
+    EncWizard* encWizard_;
+
     Encryptor* enc_;
 };
 
 }
 
-#endif // __AARNI_MAINDIALOG_H_
+#endif // __AARNI_MAIN_DIALOG_H__

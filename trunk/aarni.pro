@@ -7,13 +7,18 @@ SOURCES += main.cpp \
     aes.cpp \
     sha384.cpp \
     encryptor.cpp \
-    main-dialog.cpp
+    encryption-wizard.cpp \
+    decryption-wizard.cpp \
+    main-dialog.cpp \
+    about-dialog.cpp
 HEADERS += aes.h \
     const.h \
     sha384.h \
     encryptor.h \
+    encryption-wizard.h \
+    decryption-wizard.h \
     main-dialog.h \
-    main-dialog-ui.h
+    about-dialog.h
 RESOURCES += resources.qrc
 TRANSLATIONS += lang/lang_en.ts \
     lang/lang_zh.ts

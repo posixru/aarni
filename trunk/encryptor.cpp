@@ -13,7 +13,6 @@
  * Lesser General Public License for more details.
  */
 
-#include <QDateTime>
 #include <QDir>
 #include <QDirIterator>
 #include <QFile>
@@ -22,9 +21,6 @@
 
 #include "const.h"
 #include "encryptor.h"
-
-#include <iostream>
-using namespace std;
 
 namespace Aarni
 {
@@ -124,13 +120,27 @@ void Encryptor::encrypt()
     // encrypt files
     aes_.reset();
     directory_.clear();
-    QDirIterator di(param_.source_, QDirIterator::Subdirectories);
-    while(di.hasNext()) {
-        QString tmp = di.next();
-        if (di.fileInfo().isFile() && di.fileName() != "." && di.fileName() != "..")
-        {
-            encryptFile(tmp);
+
+    QFileInfo info(param_.source_);
+    if (info.isFile())
+    {
+        encryptFile(param_.source_);
+    }
+    else if (info.isDir())
+    {
+        QDirIterator di(param_.source_, QDirIterator::Subdirectories);
+        while(di.hasNext()) {
+            QString tmp = di.next();
+            if (di.fileInfo().isFile() && di.fileName() != "." && di.fileName() != "..")
+            {
+                encryptFile(tmp);
+            }
         }
+    }
+    else
+    {
+        emit encryptionCompleted(ERROR_SOURCE_NOT_EXIST);
+        return;
     }
 
     // write the header
@@ -223,7 +233,6 @@ void Encryptor::decrypt()
     // decrypt files
     aes_.reset();
     int size = directory_.size();
-    cout << size << endl;
     for (int i = 0; i < size; i++)
     {
         // decrypt and decompress
