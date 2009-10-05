@@ -13,21 +13,31 @@
  * Lesser General Public License for more details.
  */
 
-#include <QtGui/QApplication>
-#include <QLocale>
-#include <QTranslator>
+#ifndef __AARNI_ABOUT_DIALOG_H__
+#define __AARNI_ABOUT_DIALOG_H__
 
-#include "main-dialog.h"
+#include <QDialog>
+#include <QLabel>
 
-int main(int argc, char *argv[])
+namespace Aarni
 {
-    QApplication app(argc, argv);
 
-    QTranslator trans;
-    trans.load(":/lang/lang_en");
-    app.installTranslator(&trans);
+class AboutDialog : public QDialog
+{
+    Q_OBJECT
 
-    Aarni::MainDialog aarni;
+public:
+    AboutDialog(QWidget* parent = NULL);
 
-    return app.exec();
+    void retranslateUI();
+
+private:
+    void setupUI();
+
+    QLabel* descLabel_;
+    QLabel* logoLabel_;
+};
+
 }
+
+#endif // __AARNI_ABOUT_DIALOG_H__

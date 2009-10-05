@@ -2,235 +2,315 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="en_US">
 <context>
-    <name>Aarni::MainDialog</name>
+    <name>Aarni::AboutDialog</name>
     <message>
-        <location filename="../main-dialog.cpp" line="137"/>
-        <source>MESSAGE_ENCRYPTION_TITLE</source>
-        <translation type="unfinished">Encrypting...</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog.cpp" line="137"/>
-        <source>MESSAGE_ENCRYPTION_TEXT</source>
-        <translation type="unfinished">Encrypting, please wait...</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog.cpp" line="159"/>
-        <source>MESSAGE_DECRYPTION_TITLE</source>
-        <translation type="unfinished">Decrypting...</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog.cpp" line="159"/>
-        <source>MESSAGE_DECRYPTION_TEXT</source>
-        <translation type="unfinished">Decrypting, please wait...</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog.cpp" line="172"/>
-        <location filename="../main-dialog.cpp" line="175"/>
-        <location filename="../main-dialog.cpp" line="178"/>
-        <location filename="../main-dialog.cpp" line="181"/>
-        <source>MESSAGE_COMPLETE_TITLE</source>
-        <translation type="unfinished">Encryption Completed</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog.cpp" line="172"/>
-        <source>MESSAGE_COMPLETE_TEXT</source>
-        <translation type="unfinished">Success!</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog.cpp" line="175"/>
-        <source>MESSAGE_COMPLETE_CORRUPTED_FILE</source>
-        <translation type="unfinished">The encrypted file is corrupted!</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog.cpp" line="178"/>
-        <source>MESSAGE_COMPLETE_INVALID_FORMAT</source>
-        <translation type="unfinished">The file is not encrypted by Aarni!</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog.cpp" line="181"/>
-        <source>MESSAGE_COMPLETE_UNKNOWN</source>
-        <translation type="unfinished">Unknown error occurs!</translation>
-    </message>
-</context>
-<context>
-    <name>Aarni::MainDialogUI</name>
-    <message>
-        <location filename="../main-dialog-ui.h" line="83"/>
-        <source>DIALOG_TITLE</source>
-        <translation type="unfinished">Aarni v0.2.0</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="85"/>
-        <source>SUBTITLE_LABEL</source>
-        <translation type="unfinished">Keep your files secure!</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="86"/>
-        <source>ENCRYPT_BUTTON</source>
-        <translation type="unfinished">Encrypt</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="87"/>
-        <source>DECRYPT_BUTTON</source>
-        <translation type="unfinished">Decrypt</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="88"/>
-        <source>BROWSE_BUTTON</source>
-        <translation type="unfinished">Home</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="89"/>
-        <source>ABOUT_BUTTON</source>
-        <translation type="unfinished">About</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="91"/>
-        <source>ENCRYPT_WIZARD_TITLE</source>
-        <translation type="unfinished">Encryption Wizard</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="92"/>
-        <source>ENCRYPT_SOURCE_PAGE</source>
-        <translation type="unfinished">Source</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="93"/>
-        <source>ENCRYPT_SOURCE_SUBTITLE</source>
-        <translation type="unfinished">Choose the files to be encrypted</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="94"/>
-        <source>ENCRYPT_DESTINATION_PAGE</source>
-        <translation type="unfinished">Destination</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="95"/>
-        <source>ENCRYPT_DESTINATION_SUBTITLE</source>
-        <translation type="unfinished">Choose the path to save the encrypted file</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="96"/>
-        <source>ENCRYPT_PASSWORD_PAGE</source>
-        <translation type="unfinished">Password</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="97"/>
-        <source>ENCRYPT_PASSWORD_SUBTITLE</source>
-        <translation type="unfinished">Choose the password for the encryption</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="98"/>
-        <source>ENCRYPT_SOURCE_LABEL</source>
-        <translation type="unfinished">Source Files:</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="99"/>
-        <source>ENCRYPT_DESTINATION_LABEL</source>
-        <translation type="unfinished">Save As:</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="100"/>
-        <source>ENCRYPT_PASSWORD_LABEL</source>
-        <translation type="unfinished">Password:</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="101"/>
-        <source>ENCRYPT_BROWSE_SOURCE_FILE_BUTTON</source>
-        <translation type="unfinished">File</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="102"/>
-        <source>ENCRYPT_BROWSE_SOURCE_DIR_BUTTON</source>
-        <translation type="unfinished">Dir</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="103"/>
-        <source>ENCRYPT_BROWSE_DESTINATION_BUTTON</source>
-        <translation type="unfinished">Browse</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="104"/>
-        <source>ENCRYPT_SHOW_PASSWORD_CHECKBOX</source>
-        <translation type="unfinished">Show Password</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="106"/>
-        <source>DECRYPT_WIZARD_TITLE</source>
-        <translation type="unfinished">Decryption Wizard</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="107"/>
-        <source>DECRYPT_SOURCE_PAGE</source>
-        <translation type="unfinished">Source</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="108"/>
-        <source>DECRYPT_SOURCE_SUBTITLE</source>
-        <translation type="unfinished">Choose the file to be decrypted</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="109"/>
-        <source>DECRYPT_DESTINATION_PAGE</source>
-        <translation type="unfinished">Destination</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="110"/>
-        <source>DECRYPT_DESTINATION_SUBTITLE</source>
-        <translation type="unfinished">Choose the path to save the decrypted files</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="111"/>
-        <source>DECRYPT_PASSWORD_PAGE</source>
-        <translation type="unfinished">Password</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="112"/>
-        <source>DECRYPT_PASSWORD_SUBTITLE</source>
-        <translation type="unfinished">Input the password for the decryption</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="113"/>
-        <source>DECRYPT_SOURCE_LABEL</source>
-        <translation type="unfinished">Encrypted File:</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="114"/>
-        <source>DECRYPT_DESTINATION_LABEL</source>
-        <translation type="unfinished">Save As:</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="115"/>
-        <source>DECRYPT_PASSWORD_LABEL</source>
-        <translation type="unfinished">Password</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="116"/>
-        <source>DECRYPT_BROWSE_SOURCE_DIR_BUTTON</source>
-        <translation type="unfinished">Browse</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="117"/>
-        <source>DECRYPT_BROWSE_DESTINATION_BUTTON</source>
-        <translation type="unfinished">Browse</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="118"/>
-        <source>DECRYPT_SHOW_PASSWORD_CHECKBOX</source>
-        <translation type="unfinished">Show Password</translation>
-    </message>
-    <message>
-        <location filename="../main-dialog-ui.h" line="120"/>
+        <location filename="../about-dialog.cpp" line="33"/>
         <source>ABOUT_DIALOG_TITLE</source>
         <translation type="unfinished">About Aarni</translation>
     </message>
     <message>
-        <location filename="../main-dialog-ui.h" line="121"/>
+        <location filename="../about-dialog.cpp" line="35"/>
         <source>DESCRIPTION_LABEL</source>
         <translation type="unfinished">Aarni is a small and easy-to-use file encryptor.&lt;br&gt;&lt;br&gt;
 Copyright (C) 2009 &lt;a href=&quot;http://xizhizhu.blogspot.com/&quot;&gt;Xizhi Zhu&lt;/a&gt; &amp;lt;&lt;a href=&quot;mailto:xizhi.zhu@gmail.com&quot;&gt;xizhi.zhu@gmail.com&lt;/a&gt;&amp;gt;&lt;br&gt;
 All rights reserved.&lt;br&gt;&lt;br&gt;
 This program is free software; you can redistribute it and/or modify it under the terms of &lt;a href=&quot;http://www.gnu.org/licenses/lgpl-2.1.html&quot;&gt;LGPL v2.1&lt;/a&gt;. Note that it is WITH NO WARRANTY OF ANY KIND.</translation>
+    </message>
+</context>
+<context>
+    <name>Aarni::DecConclusionPage</name>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="276"/>
+        <source>DECRYPT_CONCLUSION_PAGE</source>
+        <translation type="unfinished">Decryption Details</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="277"/>
+        <source>DECRYPT_CONCLUSION_SUBTITLE</source>
+        <translation type="unfinished">The details for the file to be decrypted</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="279"/>
+        <source>DECRYPT_CONCLUSION_SOURCE</source>
+        <translation type="unfinished">Source:</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="280"/>
+        <source>DECRYPT_CONCLUSION_SIZE</source>
+        <translation type="unfinished">Size (Bytes):</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="281"/>
+        <source>DECRYPT_CONCLUSION_DESTINATION</source>
+        <translation type="unfinished">Save As:</translation>
+    </message>
+</context>
+<context>
+    <name>Aarni::DecDestinationPage</name>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="156"/>
+        <source>DECRYPT_DESTINATION_PAGE</source>
+        <translation type="unfinished">Decrypt Destination</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="157"/>
+        <source>DECRYPT_DESTINATION_SUBTITLE</source>
+        <translation type="unfinished">Select the path to save the decrypted files</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="159"/>
+        <source>DECRYPT_DESTINATION_LABEL</source>
+        <translation type="unfinished">Save As:</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="160"/>
+        <source>DECRYPT_DESTINATION_BROWSE_BUTTON</source>
+        <translation type="unfinished">Browse</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="172"/>
+        <source>ENCRYPT_DESTINATION_EXIST</source>
+        <translation type="unfinished">WARNING: You may override the existing file!</translation>
+    </message>
+</context>
+<context>
+    <name>Aarni::DecPasswordPage</name>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="219"/>
+        <source>DECRYPT_PASSWORD_PAGE</source>
+        <translation type="unfinished">Decryption Password</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="220"/>
+        <source>DECRYPT_PASSWORD_SUBTITLE</source>
+        <translation type="unfinished">Input the password to decrypt the file</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="222"/>
+        <source>DECRYPT_PASSWORD_LABEL</source>
+        <translation type="unfinished">Password:</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="223"/>
+        <source>DECRYPT_PASSWORD_CHECKBOX</source>
+        <translation type="unfinished">Show</translation>
+    </message>
+</context>
+<context>
+    <name>Aarni::DecSourcePage</name>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="93"/>
+        <source>DECRYPT_SOURCE_PAGE</source>
+        <translation type="unfinished">Decryption Source</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="94"/>
+        <source>DECRYPT_SOURCE_SUBTITLE</source>
+        <translation type="unfinished">Select the file to be decrypted</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="96"/>
+        <source>DECRYPT_SOURCE_LABEL</source>
+        <translation type="unfinished">Source:</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="97"/>
+        <source>ENCRYPT_FILE_BROWSE_BUTTON</source>
+        <translation type="unfinished">Browse</translation>
+    </message>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="109"/>
+        <source>DECRYPT_SOURCE_NOT_EXIST</source>
+        <translation type="unfinished">WARNING: The source doesn&apos;t exist!</translation>
+    </message>
+</context>
+<context>
+    <name>Aarni::DecWizard</name>
+    <message>
+        <location filename="../decryption-wizard.cpp" line="37"/>
+        <source>DECRYPT_WIZARD_TITLE</source>
+        <translation type="unfinished">Decryption</translation>
+    </message>
+</context>
+<context>
+    <name>Aarni::EncConclusionPage</name>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="305"/>
+        <source>ENCRYPT_CONCLUSION_PAGE</source>
+        <translation type="unfinished">Encryption Details</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="306"/>
+        <source>ENCRYPT_CONCLUSION_SUBTITLE</source>
+        <translation type="unfinished">The details for the files to be encrypted</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="308"/>
+        <source>ENCRYPT_CONCLUSION_SOURCE</source>
+        <translation type="unfinished">Source:</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="309"/>
+        <source>ENCRYPT_CONCLUSION_SIZE</source>
+        <translation type="unfinished">Size (Bytes):</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="310"/>
+        <source>ENCRYPT_CONCLUSION_DESTINATION</source>
+        <translation type="unfinished">Save As:</translation>
+    </message>
+</context>
+<context>
+    <name>Aarni::EncDestinationPage</name>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="167"/>
+        <source>ENCRYPT_DESTINATION_PAGE</source>
+        <translation type="unfinished">Encryption Destination</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="168"/>
+        <source>ENCRYPT_DESTINATION_SUBTITLE</source>
+        <translation type="unfinished">Select the path to save the encrypted files</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="170"/>
+        <source>ENCRYPT_DESTINATION_LABEL</source>
+        <translation type="unfinished">Save As:</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="171"/>
+        <source>ENCRYPT_DESTINATION_BROWSE_BUTTON</source>
+        <translation type="unfinished">Browse</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="183"/>
+        <source>ENCRYPT_DESTINATION_EXIST</source>
+        <translation type="unfinished">WARNING: You may override the existing file!</translation>
+    </message>
+</context>
+<context>
+    <name>Aarni::EncPasswordPage</name>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="230"/>
+        <source>ENCRYPT_PASSWORD_PAGE</source>
+        <translation type="unfinished">Encryption Password</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="231"/>
+        <source>ENCRYPT_PASSWORD_SUBTITLE</source>
+        <translation type="unfinished">Input the password to protect your file</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="233"/>
+        <source>ENCRYPT_PASSWORD_LABEL</source>
+        <translation type="unfinished">Password:</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="234"/>
+        <source>ENCRYPT_PASSWORD_CHECKBOX</source>
+        <translation type="unfinished">Show</translation>
+    </message>
+</context>
+<context>
+    <name>Aarni::EncSourcePage</name>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="95"/>
+        <source>ENCRYPT_SOURCE_PAGE</source>
+        <translation type="unfinished">Encryption Source</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="96"/>
+        <source>ENCRYPT_SOURCE_SUBTITLE</source>
+        <translation type="unfinished">Select the files/directories to be encrypted</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="98"/>
+        <source>ENCRYPT_SOURCE_LABEL</source>
+        <translation type="unfinished">Source:</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="99"/>
+        <source>ENCRYPT_FILE_BROWSE_BUTTON</source>
+        <translation type="unfinished">File</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="100"/>
+        <source>ENCRYPT_DIR_BROWSE_BUTTON</source>
+        <translation type="unfinished">Dir</translation>
+    </message>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="117"/>
+        <source>ENCRYPT_SOURCE_NOT_EXIST</source>
+        <translation type="unfinished">WARNING: The source doesn&apos;t exist!</translation>
+    </message>
+</context>
+<context>
+    <name>Aarni::EncWizard</name>
+    <message>
+        <location filename="../encryption-wizard.cpp" line="38"/>
+        <source>ENCRYPT_WIZARD_TITLE</source>
+        <translation type="unfinished">Encryption</translation>
+    </message>
+</context>
+<context>
+    <name>Aarni::MainDialog</name>
+    <message>
+        <location filename="../main-dialog.cpp" line="47"/>
+        <source>MAIN_DIALOG_TITLE</source>
+        <translation type="unfinished">Aarni v0.2.1</translation>
+    </message>
+    <message>
+        <location filename="../main-dialog.cpp" line="49"/>
+        <source>MAIN_SUBTITLE_LABEL</source>
+        <translation type="unfinished">Aarni - Secure your files!</translation>
+    </message>
+    <message>
+        <location filename="../main-dialog.cpp" line="50"/>
+        <source>MAIN_ENCRYPT_BUTTON</source>
+        <translation type="unfinished">Encrypt</translation>
+    </message>
+    <message>
+        <location filename="../main-dialog.cpp" line="51"/>
+        <source>MAIN_DECRYPT_BUTTON</source>
+        <translation type="unfinished">Decrypt</translation>
+    </message>
+    <message>
+        <location filename="../main-dialog.cpp" line="52"/>
+        <source>MAIN_BROWSE_BUTTON</source>
+        <translation type="unfinished">Home</translation>
+    </message>
+    <message>
+        <location filename="../main-dialog.cpp" line="53"/>
+        <source>MAIN_ABOUT_BUTTON</source>
+        <translation type="unfinished">About</translation>
+    </message>
+    <message>
+        <location filename="../main-dialog.cpp" line="70"/>
+        <location filename="../main-dialog.cpp" line="73"/>
+        <location filename="../main-dialog.cpp" line="76"/>
+        <location filename="../main-dialog.cpp" line="79"/>
+        <source>MESSAGE_COMPLETE_TITLE</source>
+        <translation type="unfinished">Encryption Completed</translation>
+    </message>
+    <message>
+        <location filename="../main-dialog.cpp" line="70"/>
+        <source>MESSAGE_COMPLETE_TEXT</source>
+        <translation type="unfinished">Success!</translation>
+    </message>
+    <message>
+        <location filename="../main-dialog.cpp" line="73"/>
+        <source>MESSAGE_COMPLETE_CORRUPTED_FILE</source>
+        <translation type="unfinished">The file is corrupted!</translation>
+    </message>
+    <message>
+        <location filename="../main-dialog.cpp" line="76"/>
+        <source>MESSAGE_COMPLETE_INVALID_FORMAT</source>
+        <translation type="unfinished">The file is not encrypted by Aarni!</translation>
+    </message>
+    <message>
+        <location filename="../main-dialog.cpp" line="79"/>
+        <source>MESSAGE_COMPLETE_UNKNOWN</source>
+        <translation type="unfinished">Unknown error occurs!</translation>
     </message>
 </context>
 </TS>

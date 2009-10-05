@@ -14,169 +14,115 @@
  */
 
 #include <QDesktopServices>
-#include <QFileDialog>
+#include <QGridLayout>
 #include <QMessageBox>
-#include <QString>
 #include <QUrl>
 
-#include "aes.h"
 #include "main-dialog.h"
-#include "sha384.h"
 
 namespace Aarni
 {
 
-MainDialog::MainDialog(QObject* parent)
-    : QObject(parent)
+MainDialog::MainDialog(QWidget* parent)
+    : QDialog(parent)
 {
-    ui_ = new MainDialogUI;
+    setupUI();
+    retranslateUI();
+
     enc_ = new Encryptor;
 
-    connect(ui_->browseButton_, SIGNAL(clicked()), this, SLOT(viewHomePage()));
-
-    connect(ui_->encryptBrowseSourceFileButton_, SIGNAL(clicked()), this, SLOT(browseEncryptionSourceFile()));
-    connect(ui_->encryptBrowseSourceDirButton_, SIGNAL(clicked()), this, SLOT(browseEncryptionSourceDir()));
-    connect(ui_->encryptBrowseDestinationButton_, SIGNAL(clicked()), this, SLOT(browseEncryptionDestination()));
-    connect(ui_->encryptPasswordCheckbox_, SIGNAL(stateChanged(int)), this, SLOT(showEncryptionPassword(int)));
-    connect(ui_->encryptWizard_->button(QWizard::FinishButton), SIGNAL(clicked()), this, SLOT(encrypt()));
-
-    connect(ui_->decryptBrowseSourceButton_, SIGNAL(clicked()), this, SLOT(browseDecryptionSource()));
-    connect(ui_->decryptBrowseDestinationButton_, SIGNAL(clicked()), this, SLOT(browseDecryptionDestination()));
-    connect(ui_->decryptPasswordCheckbox_, SIGNAL(stateChanged(int)), this, SLOT(showEncryptionPassword(int)));
-    connect(ui_->decryptWizard_->button(QWizard::FinishButton), SIGNAL(clicked()), this, SLOT(decrypt()));
-
+    connect(encryptButton_, SIGNAL(clicked()), encWizard_, SLOT(show()));
+    connect(decryptButton_, SIGNAL(clicked()), decWizard_, SLOT(show()));
+    connect(browseButton_, SIGNAL(clicked()), this, SLOT(openHomePage()));
+    connect(aboutButton_, SIGNAL(clicked()), aboutDialog_, SLOT(show()));
+    connect(encWizard_, SIGNAL(encryptionRequested(EncryptionParameter)),
+            enc_, SLOT(encrypt(EncryptionParameter)));
+    connect(decWizard_, SIGNAL(decryptionRequested(EncryptionParameter)),
+            enc_, SLOT(encrypt(EncryptionParameter)));
     connect(enc_, SIGNAL(encryptionCompleted(quint32)), this, SLOT(completeEncryption(quint32)));
-
-    ui_->show();
 }
 
-MainDialog::~MainDialog()
+void MainDialog::retranslateUI()
 {
-    delete ui_;
-    delete enc_;
+    setWindowTitle(tr("MAIN_DIALOG_TITLE"));
+
+    titleLabel_->setText(tr("MAIN_SUBTITLE_LABEL"));
+    encryptButton_->setText(tr("MAIN_ENCRYPT_BUTTON"));
+    decryptButton_->setText(tr("MAIN_DECRYPT_BUTTON"));
+    browseButton_->setText(tr("MAIN_BROWSE_BUTTON"));
+    aboutButton_->setText(tr("MAIN_ABOUT_BUTTON"));
+
+    aboutDialog_->retranslateUI();
+    decWizard_->retranslateUI();
+    encWizard_->retranslateUI();
 }
 
-void MainDialog::viewHomePage()
+void MainDialog::openHomePage()
 {
     QDesktopServices::openUrl(QUrl("http://xizhizhu.blogspot.com/"));
 }
 
-void MainDialog::browseEncryptionSourceFile()
-{
-    ui_->encryptSourceEdit_->setText(QFileDialog::getOpenFileName());
-}
-
-void MainDialog::browseEncryptionSourceDir()
-{
-    ui_->encryptSourceEdit_->setText(QFileDialog::getExistingDirectory());
-}
-
-void MainDialog::browseEncryptionDestination()
-{
-    ui_->encryptDestinationEdit_->setText(QFileDialog::getSaveFileName());
-}
-
-void MainDialog::showEncryptionPassword(int state)
-{
-    if (Qt::Checked == state)
-    {
-        ui_->encryptPasswordEdit_->setEchoMode(QLineEdit::Normal);
-    }
-    else if (Qt::Unchecked == state)
-    {
-        ui_->encryptPasswordEdit_->setEchoMode(QLineEdit::Password);
-    }
-}
-
-void MainDialog::browseDecryptionSource()
-{
-    ui_->decryptSourceEdit_->setText(QFileDialog::getOpenFileName());
-}
-
-void MainDialog::browseDecryptionDestination()
-{
-    ui_->decryptDestinationEdit_->setText(QFileDialog::getExistingDirectory());
-}
-
-void MainDialog::showDecryptionPassword(int state)
-{
-    if (Qt::Checked == state)
-    {
-        ui_->decryptPasswordEdit_->setEchoMode(QLineEdit::Normal);
-    }
-    else if (Qt::Unchecked == state)
-    {
-        ui_->decryptPasswordEdit_->setEchoMode(QLineEdit::Password);
-    }
-}
-
-
-
-void MainDialog::encrypt()
-{
-    EncryptionParameter param;
-    param.isEncryption_ = true;
-    param.source_ = ui_->encryptSourceEdit_->text();
-    param.destination_ = ui_->encryptDestinationEdit_->text();
-    param.password_ = ui_->encryptPasswordEdit_->text();
-    if (param.source_.isEmpty() || param.destination_.isEmpty() || param.password_.isEmpty())
-    {
-        return;
-    }
-
-    ui_->encryptButton_->setEnabled(false);
-    ui_->decryptButton_->setEnabled(false);
-    ui_->browseButton_->setEnabled(false);
-    ui_->aboutButton_->setEnabled(false);
-
-    enc_->encrypt(param);
-
-    QMessageBox::information(ui_, tr("MESSAGE_ENCRYPTION_TITLE"), tr("MESSAGE_ENCRYPTION_TEXT"));
-}
-
-void MainDialog::decrypt()
-{
-    EncryptionParameter param;
-    param.isEncryption_ = false;
-    param.source_ = ui_->decryptSourceEdit_->text();
-    param.destination_ = ui_->decryptDestinationEdit_->text();
-    param.password_ = ui_->decryptPasswordEdit_->text();
-    if (param.source_.isEmpty() || param.destination_.isEmpty() || param.password_.isEmpty())
-    {
-        return;
-    }
-
-    ui_->encryptButton_->setEnabled(false);
-    ui_->decryptButton_->setEnabled(false);
-    ui_->browseButton_->setEnabled(false);
-    ui_->aboutButton_->setEnabled(false);
-
-    enc_->encrypt(param);
-
-    QMessageBox::information(ui_, tr("MESSAGE_DECRYPTION_TITLE"), tr("MESSAGE_DECRYPTION_TEXT"));
-}
-
 void MainDialog::completeEncryption(quint32 result)
 {
-    ui_->encryptButton_->setEnabled(true);
-    ui_->decryptButton_->setEnabled(true);
-    ui_->browseButton_->setEnabled(true);
-    ui_->aboutButton_->setEnabled(true);
-
     switch (result)
     {
     case ERROR_SUCCESS:
-        QMessageBox::information(ui_, tr("MESSAGE_COMPLETE_TITLE"), tr("MESSAGE_COMPLETE_TEXT"));
+        QMessageBox::information(this, tr("MESSAGE_COMPLETE_TITLE"), tr("MESSAGE_COMPLETE_TEXT"));
         break;
     case ERROR_CORRUPTED_FILE:
-        QMessageBox::information(ui_, tr("MESSAGE_COMPLETE_TITLE"), tr("MESSAGE_COMPLETE_CORRUPTED_FILE"));
+        QMessageBox::information(this, tr("MESSAGE_COMPLETE_TITLE"), tr("MESSAGE_COMPLETE_CORRUPTED_FILE"));
         break;
     case ERROR_INVALID_FILE_FORMAT:
-        QMessageBox::information(ui_, tr("MESSAGE_COMPLETE_TITLE"), tr("MESSAGE_COMPLETE_INVALID_FORMAT"));
+        QMessageBox::information(this, tr("MESSAGE_COMPLETE_TITLE"), tr("MESSAGE_COMPLETE_INVALID_FORMAT"));
         break;
     default:
-        QMessageBox::information(ui_, tr("MESSAGE_COMPLETE_TITLE"), tr("MESSAGE_COMPLETE_UNKNOWN"));
+        QMessageBox::information(this, tr("MESSAGE_COMPLETE_TITLE"), tr("MESSAGE_COMPLETE_UNKNOWN"));
     }
+}
+
+void MainDialog::setupUI()
+{
+    setWindowIcon(QIcon(":/images/logo.png"));
+
+    QGridLayout* layout = new QGridLayout;
+    setLayout(layout);
+
+    logoLabel_ = new QLabel;
+    logoLabel_->setPixmap(QPixmap(":/images/logo.png"));
+    layout->addWidget(logoLabel_, 0, 0);
+
+    titleLabel_ = new QLabel;
+    layout->addWidget(titleLabel_, 0, 1, 1, 3);
+
+    encryptButton_ = new QPushButton;
+    encryptButton_->setIcon(QIcon(":/images/encrypt.png"));
+    encryptButton_->setIconSize(QSize(48, 48));
+    encryptButton_->setFixedSize(150, 60);
+    layout->addWidget(encryptButton_, 1, 0, 1, 2);
+
+    decryptButton_ = new QPushButton;
+    decryptButton_->setIcon(QIcon(":/images/decrypt.png"));
+    decryptButton_->setIconSize(QSize(48, 48));
+    decryptButton_->setFixedSize(150, 60);
+    layout->addWidget(decryptButton_, 1, 2, 1, 2);
+
+    browseButton_ = new QPushButton;
+    browseButton_->setIcon(QIcon(":/images/home.png"));
+    browseButton_->setIconSize(QSize(48, 48));
+    browseButton_->setFixedSize(150, 60);
+    layout->addWidget(browseButton_, 2, 0, 1, 2);
+
+    aboutButton_ = new QPushButton;
+    aboutButton_->setIcon(QIcon(":/images/about.png"));
+    aboutButton_->setIconSize(QSize(48, 48));
+    aboutButton_->setFixedSize(150, 60);
+    layout->addWidget(aboutButton_, 2, 2, 1, 2);
+
+    aboutDialog_ = new AboutDialog;
+    decWizard_ = new DecWizard;
+    encWizard_ = new EncWizard;
+
+    show();
 }
 
 }
