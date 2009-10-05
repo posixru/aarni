@@ -61,7 +61,6 @@ class Encryptor : public QThread
 public:
     Encryptor(QObject* parent = NULL);
 
-public slots:
     // Encrypt the files according to the parameters.
     //
     // Parameter:

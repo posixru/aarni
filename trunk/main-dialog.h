@@ -39,6 +39,7 @@ public:
 
 private slots:
     void openHomePage();
+    void requestEncryption(EncryptionParameter param);
     void completeEncryption(quint32 result);
 
 private:

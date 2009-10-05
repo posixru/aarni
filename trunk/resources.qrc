@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/" >
         <file>lang/lang_en.qm</file>
-        <file>lang/lang_zh.qm</file>
         <file>images/logo.png</file>
         <file>images/encrypt.png</file>
         <file>images/decrypt.png</file>

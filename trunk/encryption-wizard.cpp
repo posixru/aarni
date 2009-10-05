@@ -58,6 +58,8 @@ void EncWizard::accept()
     param.password_ = field("password").toString();
     emit encryptionRequested(param);
 
+    restart();
+
     QDialog::accept();
 }
 
@@ -313,7 +315,6 @@ void EncConclusionPage::retranslateUI()
 
 void EncConclusionPage::setupUI()
 {
-
     QGridLayout* layout = new QGridLayout;
     setLayout(layout);
 

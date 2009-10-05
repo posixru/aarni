@@ -36,9 +36,9 @@ MainDialog::MainDialog(QWidget* parent)
     connect(browseButton_, SIGNAL(clicked()), this, SLOT(openHomePage()));
     connect(aboutButton_, SIGNAL(clicked()), aboutDialog_, SLOT(show()));
     connect(encWizard_, SIGNAL(encryptionRequested(EncryptionParameter)),
-            enc_, SLOT(encrypt(EncryptionParameter)));
+            this, SLOT(requestEncryption(EncryptionParameter)));
     connect(decWizard_, SIGNAL(decryptionRequested(EncryptionParameter)),
-            enc_, SLOT(encrypt(EncryptionParameter)));
+            this, SLOT(requestEncryption(EncryptionParameter)));
     connect(enc_, SIGNAL(encryptionCompleted(quint32)), this, SLOT(completeEncryption(quint32)));
 }
 
@@ -62,8 +62,24 @@ void MainDialog::openHomePage()
     QDesktopServices::openUrl(QUrl("http://xizhizhu.blogspot.com/"));
 }
 
+void MainDialog::requestEncryption(EncryptionParameter param)
+{
+    enc_->encrypt(param);
+
+    encryptButton_->setEnabled(false);
+    decryptButton_->setEnabled(false);
+    browseButton_->setEnabled(false);
+    aboutButton_->setEnabled(false);
+    QMessageBox::information(this, tr("MESSAGE_ENCRYPT_TITLE"), tr("MESSAGE_ENCRYPT_TEXT"));
+}
+
 void MainDialog::completeEncryption(quint32 result)
 {
+    encryptButton_->setEnabled(true);
+    decryptButton_->setEnabled(true);
+    browseButton_->setEnabled(true);
+    aboutButton_->setEnabled(true);
+
     switch (result)
     {
     case ERROR_SUCCESS:

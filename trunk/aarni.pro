@@ -20,5 +20,4 @@ HEADERS += aes.h \
     main-dialog.h \
     about-dialog.h
 RESOURCES += resources.qrc
-TRANSLATIONS += lang/lang_en.ts \
-    lang/lang_zh.ts
+TRANSLATIONS += lang/lang_en.ts
