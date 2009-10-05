@@ -57,6 +57,8 @@ void DecWizard::accept()
     param.password_ = field("password").toString();
     emit decryptionRequested(param);
 
+    restart();
+
     QDialog::accept();
 }
 
